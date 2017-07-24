@@ -45,7 +45,7 @@ return [
         ],
         'urlManagerBackend' => [
             'class' => 'yii\web\urlManager',
-            'baseUrl' => '/dhdc4/backend/web',
+            'baseUrl' => '/dhdc3/backend/web',
             //'scriptUrl' => '../backend/web/',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
