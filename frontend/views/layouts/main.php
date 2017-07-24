@@ -35,7 +35,7 @@ if ($config) {
         <title>
             <?php
             //echo Html::encode($this->title);
-            echo "DHDC 4.0"
+            echo "DHDC 3.0"
             ?>
         </title>
         <?php $this->head() ?>
@@ -106,7 +106,7 @@ if ($config) {
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-left'],
                 'encodeLabels' => false,
-                'items' => [['label' => 'DHDC 4.0 ' . $district]],
+                'items' => [['label' => 'DHDC 3.0 ' . $district]],
             ]);
 
 
