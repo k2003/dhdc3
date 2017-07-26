@@ -157,7 +157,7 @@
 
             $('.btn-circle').click(function () {
                 var r = prompt("ระบุรัศมี (เมตร)", 100);
-                L.circle(map.getCenter(), Number(r), {color: 'red', 'dashArray': 4, weight: 2}).addTo(map);
+                L.circle(map.getCenter(), Number(r), {color: 'yellow', 'dashArray': 4, weight: 2}).addTo(map);
             });
 
             $('.btn-reload').click(function () {
