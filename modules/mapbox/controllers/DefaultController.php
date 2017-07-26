@@ -1,9 +1,9 @@
 <?php
 
-namespace frontend\modules\mapbox\controllers;
+namespace modules\mapbox\controllers;
 
 use yii\web\Controller;
-use frontend\modules\mapbox\models\GisDhdcTambon;
+use modules\mapbox\models\GisDhdcTambon;
 use components\MyHelper;
 
 /**

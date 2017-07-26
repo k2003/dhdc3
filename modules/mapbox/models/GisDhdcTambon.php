@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\mapbox\models;
+namespace modules\mapbox\models;
 
 use Yii;
 

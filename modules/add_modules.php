@@ -5,6 +5,12 @@ return [
     'ehr' => [
         'class' => 'modules\ehr\Ehr'
     ],
+    'mapbox'=>[
+        'class'=>'modules\mapbox\Mapbox'
+    ],
+    'smcread'=>[
+        'class'=>'modules\smcread\Smcread'
+    ]
     
     
 ];

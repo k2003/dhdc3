@@ -1,16 +1,16 @@
 <?php
 
-namespace frontend\modules\mapbox;
+namespace modules\smcread;
 
 /**
- * mapbox module definition class
+ * smcread module definition class
  */
-class Mapbox extends \yii\base\Module
+class SmcRead extends \yii\base\Module
 {
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'frontend\modules\mapbox\controllers';
+    public $controllerNamespace = 'modules\smcread\controllers';
 
     /**
      * @inheritdoc
