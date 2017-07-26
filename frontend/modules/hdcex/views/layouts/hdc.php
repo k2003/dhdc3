@@ -17,7 +17,7 @@ AppAsset::register($this);
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-        <title>DHDC 4.0</title>
+        <title>DHDC 3.0 DATA-EXCHANGE</title>
         <?php $this->head() ?>
     </head>
     <body>
