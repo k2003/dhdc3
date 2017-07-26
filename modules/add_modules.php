@@ -5,14 +5,15 @@ return [
     'ehr' => [
         'class' => 'modules\ehr\Ehr'
     ],
-    'mapbox'=>[
-        'class'=>'modules\mapbox\Mapbox'
+    'mapbox' => [
+        'class' => 'modules\mapbox\Mapbox'
     ],
-    'smcread'=>[
-        'class'=>'modules\smcread\Smcread'
-    ]
-    
-    
+    'smcread' => [
+        'class' => 'modules\smcread\Smcread'
+    ],
+    'correct' => [
+        'class' => 'modules\correct\Correct',
+    ],
 ];
 
 
