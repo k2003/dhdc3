@@ -3,21 +3,33 @@
 <html>
     <head>
         <meta charset=utf-8 />
-        <title>DHDC 4.0 GIS</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <title>DHDC 4.0 GIS</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
         <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+        <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+
+
+        <script src="<?= \Yii::getAlias('@web') ?>/js/Leaflet.Control.Custom.js"></script>        
+
         <style>
             body { margin:0; padding:0; }
             #map { position:absolute; top:0; bottom:0; width:100%; }
         </style>
     </head>
     <body>
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
         <div id='map'></div>
         <script>
             L.mapbox.accessToken = 'pk.eyJ1IjoidGVobm5uIiwiYSI6ImNpZzF4bHV4NDE0dTZ1M200YWxweHR0ZzcifQ.lpRRelYpT0ucv1NN08KUWQ';
             var map = L.mapbox.map('map').setView([16, 100], 6);
+            var hash = L.hash(map);
             //base map
             var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
@@ -81,14 +93,13 @@
                 L.imageOverlay(imageUrl, imageBounds).addTo(rain).setOpacity(0.95);
             });//จบฝน
 
-           
+
 
             //จบ wms
 
             var overlays = {
                 'ขอบเขตตำบล': tambon,
                 'เรดาห์น้ำฝน': rain,
-                
             };
             L.control.layers(baseLayers, overlays).addTo(map);
             tambon.eachLayer(function (layer) {
@@ -114,6 +125,57 @@
                     layer.bindPopup(layer.feature.properties.TAM_NAMT);
                     layer.openPopup();
                 });
+            });
+
+            L.control.custom({
+                position: 'topleft',
+                content:'<button type="button" class="btn btn-default btn-circle" title="รัศมี...">' +
+                        '    <i class="glyphicon glyphicon-record"></i>' +
+                        '</button>'+
+                        '<button type="button" class="btn btn-default btn-reload" title="reload...">' +
+                        '    <i class="glyphicon glyphicon-refresh"></i>' +
+                        '</button>'
+                        ,
+                        
+                        
+                        
+                classes: 'btn-group-vertical btn-group-sm',
+                style:
+                        {
+                            margin: '10px',
+                            padding: '0px 0 0 0',
+                            cursor: 'pointer'
+                        },
+            }).addTo(map);
+
+            $('.btn-circle').click(function () {
+                var r = prompt("ระบุรัศมี (เมตร)", 100);
+                L.circle(map.getCenter(), Number(r), {color: 'red', 'dashArray': 4, weight: 2}).addTo(map);
+            });
+            
+              $('.btn-reload').click(function () {
+                location.reload();
+            });
+
+
+            //crosshair
+            var crosshairIcon = L.icon({
+                iconUrl: "<?= \Yii::getAlias('@web') ?>/images/crosshair.png",
+                iconSize: [25, 25], // size of the icon
+                //iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+            });
+            crosshair = new L.marker(map.getCenter(), {icon: crosshairIcon, clickable: false});
+            crosshair.addTo(map);
+
+// Move the crosshair to the center of the map when the user pans
+            map.on('move', function (e) {
+                crosshair.setLatLng(map.getCenter());
+
+            });
+
+            map.on('moveend', function (e) {
+                var latlng = crosshair.getLatLng();
+                console.log(latlng)
             });
 
 
