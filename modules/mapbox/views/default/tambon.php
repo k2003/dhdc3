@@ -21,11 +21,21 @@
         <style>
             body { margin:0; padding:0; }
             #map { position:absolute; top:0; bottom:0; width:100%; }
+            .show-latlng{
+                position:absolute;
+                bottom:0;
+                z-index: 10;
+               
+            }   
         </style>
     </head>
     <body>
         <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
-        <div id='map'></div>
+        <div id='map'>         
+        </div>
+           <div class="show-latlng">
+                <input type="text" id="txt-latlng" style="width: 290px"/>
+            </div>
         <script>
             L.mapbox.accessToken = 'pk.eyJ1IjoidGVobm5uIiwiYSI6ImNpZzF4bHV4NDE0dTZ1M200YWxweHR0ZzcifQ.lpRRelYpT0ucv1NN08KUWQ';
             var map = L.mapbox.map('map').setView([16, 100], 6);
@@ -129,16 +139,13 @@
 
             L.control.custom({
                 position: 'topleft',
-                content:'<button type="button" class="btn btn-default btn-circle" title="รัศมี...">' +
+                content: '<button type="button" class="btn btn-default btn-circle" title="รัศมี...">' +
                         '    <i class="glyphicon glyphicon-record"></i>' +
-                        '</button>'+
+                        '</button>' +
                         '<button type="button" class="btn btn-default btn-reload" title="reload...">' +
                         '    <i class="glyphicon glyphicon-refresh"></i>' +
                         '</button>'
-                        ,
-                        
-                        
-                        
+                ,
                 classes: 'btn-group-vertical btn-group-sm',
                 style:
                         {
@@ -152,8 +159,8 @@
                 var r = prompt("ระบุรัศมี (เมตร)", 100);
                 L.circle(map.getCenter(), Number(r), {color: 'red', 'dashArray': 4, weight: 2}).addTo(map);
             });
-            
-              $('.btn-reload').click(function () {
+
+            $('.btn-reload').click(function () {
                 location.reload();
             });
 
@@ -175,10 +182,12 @@
 
             map.on('moveend', function (e) {
                 var latlng = crosshair.getLatLng();
-                console.log(latlng)
+                $('#txt-latlng').val(latlng.lat+","+latlng.lng)
             });
-
-
+            $('#txt-latlng').val(map.getCenter().lat+","+map.getCenter().lng)
+            $('#txt-latlng').click(function(e){
+                $(this).select();
+            });
         </script>
     </body>
 </html>
