@@ -1,16 +1,16 @@
 <?php
 
-namespace modules\mapbox;
+namespace modules\gis;
 
 /**
  * mapbox module definition class
  */
-class Mapbox extends \yii\base\Module
+class Gis extends \yii\base\Module
 {
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'modules\mapbox\controllers';
+    public $controllerNamespace = 'modules\gis\controllers';
 
     /**
      * @inheritdoc

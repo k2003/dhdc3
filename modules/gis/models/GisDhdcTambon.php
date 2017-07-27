@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\mapbox\models;
+namespace modules\gis\models;
 
 use Yii;
 

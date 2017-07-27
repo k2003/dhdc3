@@ -5,8 +5,8 @@ return [
     'ehr' => [
         'class' => 'modules\ehr\Ehr'
     ],
-    'mapbox' => [
-        'class' => 'modules\mapbox\Mapbox'
+    'gis' => [
+        'class' => 'modules\gis\Gis'
     ],
     'smcread' => [
         'class' => 'modules\smcread\Smcread'

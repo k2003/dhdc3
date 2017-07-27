@@ -60,7 +60,7 @@ if ($config) {
 
             
             $rpt_mnu_itms[] = '<li class="divider"></li>';
-            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-map-marker"></i> ภูมิสารสนเทศ GIS', 'url' => ['/mapbox/default/index']];
+            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-map-marker"></i> ภูมิสารสนเทศ GIS', 'url' => ['/gis/default/index']];
             
             $rpt_mnu_itms[] = '<li class="divider"></li>';
             $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-plus"></i> ระบบงาน', 'url' => ['/plugin/default/index']];

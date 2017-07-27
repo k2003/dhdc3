@@ -1,9 +1,9 @@
 <?php
 
-namespace modules\mapbox\controllers;
+namespace modules\gis\controllers;
 
 use yii\web\Controller;
-use modules\mapbox\models\GisDhdcTambon;
+use modules\gis\models\GisDhdcTambon;
 use components\MyHelper;
 use yii\filters\AccessControl;
 

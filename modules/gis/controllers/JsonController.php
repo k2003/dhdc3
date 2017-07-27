@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\mapbox\controllers;
+namespace modules\gis\controllers;
 
 use yii;
 use yii\helpers\Html;
