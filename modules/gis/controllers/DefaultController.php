@@ -35,28 +35,33 @@ class DefaultController extends Controller {
     }
 
     public function actionPointHome() {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $sql = "SELECT t.HOSPCODE,t.HID
+        $sql = 'SELECT t.HOSPCODE,t.HID
 ,concat(t.CHANGWAT,t.AMPUR,t.TAMBON) TAMBON
 ,concat(t.CHANGWAT,t.AMPUR,t.TAMBON,t.VILLAGE) VILLAGE
-,t.HOUSE ,t.LATITUDE,t.LONGITUDE
-FROM home t WHERE t.LATITUDE*1 > 0 AND t.LONGITUDE*1 > 0";
+,CONCAT(t.HOUSE," ม.",t.VILLAGE ,"  ต.",c.tambonname) TITLE
+,t.LATITUDE,t.LONGITUDE
+FROM home t 
+LEFT JOIN ctambon c on c.tamboncodefull = concat(t.CHANGWAT,t.AMPUR,t.TAMBON)
+WHERE t.LATITUDE*1 > 0 AND t.LONGITUDE*1 > 0';
+        $raw = \Yii::$app->db->createCommand($sql)->queryAll();
+        
+        $point=[];
+        foreach ($raw as $value) {
+            $home['type']='Feature';
+            $home['properties']['title']=$value['TITLE'];
+            $home['properties']['marker-color'] ='#0000CD';
+            $home['properties']['marker-symbol'] ='warehouse';
+            $home['geometry']['type']='Point';
+            $home['geometry']['coordinates'][0]=$value['LONGITUDE']*1;
+            $home['geometry']['coordinates'][1]=$value['LATITUDE']*1;
+            $point[]=$home;
+        }
 
-        $home_point[] = [
-            'type' => 'Feature',
-            'properties' => [
-                'NAME' => 'นาย ก.',
-                'marker-color' => "#00ff00", //สี
-                "marker-size" => "large", //ขนาด
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' => [99.9124456, 16.14523]
-            ]
-        ];
+        
 
-        return json_encode($home_point);
+        return json_encode($point);
     }
 
     public function actionMap() {

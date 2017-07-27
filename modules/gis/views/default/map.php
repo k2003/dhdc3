@@ -1,4 +1,7 @@
 <?php
+
+use yii\helpers\Url;
+
 $web = \Yii::getAlias('@web');
 ?>
 <!DOCTYPE html>
@@ -8,10 +11,7 @@ $web = \Yii::getAlias('@web');
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
         <title>DHDC 3.0 GIS</title>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <link href='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
@@ -20,6 +20,16 @@ $web = \Yii::getAlias('@web');
         <script src='//api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.js'></script>
         <link href='//api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.css' rel='stylesheet' />
 
+        <script src='//api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/leaflet.markercluster.js'></script>
+        <link href='//api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.css' rel='stylesheet' />
+        <link href='//api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.Default.css' rel='stylesheet' />
+
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.mapbox.css' rel='stylesheet' />
+        <!--[if lt IE 9]>
+          <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.ie.css' rel='stylesheet' />
+        <![endif]-->
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
 
         <script src="<?= $web ?>/js/Leaflet.Control.Custom.js"></script>        
 
@@ -33,14 +43,20 @@ $web = \Yii::getAlias('@web');
 
             }
             .leaflet-control-draw-measure {
-                background-image: url(<?=$web?>/images/measure-control.png);
+                background-image: url(<?= $web ?>/images/measure-control.png);
             }
         </style>
     </head>
     <body>
         <script src='//api.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
-        <link rel="stylesheet" href="<?=$web?>/lib/map/ruler/leaflet-ruler.css" />
-        <script src="<?=$web?>/lib/map/ruler/leaflet-ruler.js"></script>
+        <link rel="stylesheet" href="<?= $web ?>/lib/map/ruler/leaflet-ruler.css" />
+        <script src="<?= $web ?>/lib/map/ruler/leaflet-ruler.js"></script>
+
+        <!-- search-->
+        <link rel="stylesheet" type="text/css" href="<?= $web ?>/lib/map/leaflet-search/dist/leaflet-search.min.css"/>
+        <script src="<?= $web ?>/lib/map/leaflet-search/dist/leaflet-search.min.js"></script>
+
+        <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>   
         <div id='map'>         
         </div>
         <div class="show-latlng">
@@ -50,6 +66,9 @@ $web = \Yii::getAlias('@web');
             L.mapbox.accessToken = 'pk.eyJ1IjoidGVobm5uIiwiYSI6ImNpZzF4bHV4NDE0dTZ1M200YWxweHR0ZzcifQ.lpRRelYpT0ucv1NN08KUWQ';
             var map = L.mapbox.map('map').setView([16, 100], 6);
             var hash = L.hash(map);
+            L.control.locate().addTo(map);
+
+            var clusterHome = new L.MarkerClusterGroup().addTo(map);
             //base map
             var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
@@ -90,6 +109,46 @@ $web = \Yii::getAlias('@web');
                     .addTo(_group1);
 
             map.fitBounds(tambon.getBounds());
+<?php
+$json_home_route = Url::to(['point-home']);
+?>
+            var home = L.mapbox.featureLayer().loadURL('<?= $json_home_route ?>');
+            home.on('ready', function () {
+                home.addTo(clusterHome);
+                $('.btn-circle').click(function () {
+                    var r = prompt("ระบุรัศมี (เมตร)", 100);
+                    var circleRadius = L.circle(map.getCenter(), Number(r), {color: 'yellow', 'dashArray': 4, weight: 2}).addTo(map);
+                    circleRadius.on('click', function (e) {
+                        var layer = e.target;
+                        //console.log(layer);
+                        var latlng = layer.getLatLng();
+                        var circleJson = turf.circle([latlng.lng, latlng.lat], Number(r) / 1000, 100, 'kilometers', {});
+
+                        var circleCollection = turf.featureCollection([circleJson]);
+
+                        //var resGeojson = turf.within(,circleCollection);
+
+                        var homeGeojson = [];
+                        home.eachLayer(function (layer) {
+                            if (layer.feature.geometry.coordinates[1] != null & layer.feature.geometry.coordinates[0] != null) {
+                                homeGeojson.push(layer.feature);
+                            }
+                        });
+                        var homeCollection = turf.featureCollection(homeGeojson);
+
+                        var resGeojson = turf.within(homeCollection, circleCollection);
+                        var countHome = resGeojson.features.length;
+                        var list = "";
+                        resGeojson.features.forEach(function (data) {
+                            list += "<br> เลขที่ " + data.properties.title;
+                        });
+                        alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
+
+
+                    })
+                });
+            })
+
             //wms
 
             //ฝน
@@ -118,6 +177,7 @@ $web = \Yii::getAlias('@web');
             //จบ wms
 
             var overlays = {
+                'หลังคาเรือน': clusterHome,
                 'ขอบเขตตำบล': tambon,
                 'เรดาห์น้ำฝน': rain,
             };
@@ -166,10 +226,7 @@ $web = \Yii::getAlias('@web');
                         },
             }).addTo(map);
 
-            $('.btn-circle').click(function () {
-                var r = prompt("ระบุรัศมี (เมตร)", 100);
-                L.circle(map.getCenter(), Number(r), {color: 'yellow', 'dashArray': 4, weight: 2}).addTo(map);
-            });
+
 
             $('.btn-reload').click(function () {
                 location.reload();
@@ -197,6 +254,18 @@ $web = \Yii::getAlias('@web');
             $('#txt-latlng').val(map.getCenter().lat + "," + map.getCenter().lng)
             $('#txt-latlng').click(function (e) {
                 $(this).select();
+            });
+
+            // search control
+
+            var searchControl = new L.Control.Search({layer: clusterHome});
+            map.addControl(searchControl);
+            searchControl.on('search:locationfound', function (data) {
+                //console.log(data)
+                var latLngs = [data.latlng];
+                var pointFoundBounds = L.latLngBounds(latLngs);
+                map.fitBounds(pointFoundBounds);
+                data.layer.openPopup();
             });
         </script>
     </body>
