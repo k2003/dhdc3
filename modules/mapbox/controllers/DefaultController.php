@@ -5,12 +5,30 @@ namespace modules\mapbox\controllers;
 use yii\web\Controller;
 use modules\mapbox\models\GisDhdcTambon;
 use components\MyHelper;
+use yii\filters\AccessControl;
 
 /**
  * Default controller for the `mapbox` module
  */
 class DefaultController extends Controller {
 
+      public function behaviors() {
+
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['tambon'],
+                'rules' => [
+
+                    [
+                        'actions' => ['tambon',],
+                        'allow' => true,
+                        'roles' => ['User'],
+                    ],
+                ],
+            ],
+        ];
+    }
     public function actionIndex() {
         return $this->render('index');
     }
