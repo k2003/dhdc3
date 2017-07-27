@@ -3,9 +3,26 @@
 namespace frontend\modules\hdcex\controllers;
 
 use yii\web\Controller;
+use yii\filters\AccessControl;
 
 class DefaultController extends Controller
 {
+      public function behaviors() {
+
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['report-id'],
+                'rules' => [
+                    [
+                        'actions' => ['report-id'],
+                        'allow' => true,
+                        'roles' => ['User'],
+                    ],
+                ],
+            ],
+        ];
+    }
     public function call($store_name, $arg = NULL) {
         $sql = "";
         if ($arg != NULL) {

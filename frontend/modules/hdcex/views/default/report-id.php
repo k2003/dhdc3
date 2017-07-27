@@ -22,8 +22,11 @@ $db = \Yii::$app->db;
     ]);
     echo Html::hiddenInput('ex_id', $ex_id);
     echo Html::hiddenInput('title', $title);
-    $itms_opt = ArrayHelper::map(ChospitalAmp::find()->all(), 'hoscode', 'fullname');
+    $itms_opt = ArrayHelper::map(ChospitalAmp::find()->all(), 'hoscode', 'fullname');   
     $hospcode = \Yii::$app->request->get('hospcode');
+     if(!MyHelper::user_can('Pm')){
+        $hospcode = MyHelper::getUserHoscode(\Yii::$app->user->id);
+    }
     echo Html::dropDownList('hospcode', $hospcode, $itms_opt, ['prompt' => '- หน่วยบริการ -']);
     echo Html::submitButton(' ตกลง ', ['class' => 'btn btn-danger', 'style' => 'margin-left:5px']);
     if(MyHelper::user_can('Pm')){
