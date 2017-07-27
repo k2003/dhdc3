@@ -4,9 +4,11 @@ namespace frontend\modules\hdc\controllers;
 
 use yii\web\Controller;
 use components\MyHelper;
+use yii\filters\AccessControl;
 
 class DefaultController extends Controller {
-
+    
+ 
     public function call($store_name, $arg = NULL) {
         $sql = "";
         if ($arg != NULL) {

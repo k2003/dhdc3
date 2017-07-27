@@ -7,34 +7,31 @@ use yii\data\Pagination;
 use frontend\modules\import\models\SysFiles;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
+use components\MyHelper;
 
 /**
  * Default controller for the `qc` module
  */
 class DefaultController extends Controller {
 
-   
-        public function behaviors() {        
+    public function behaviors() {
 
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['data-error'],
                 'rules' => [
-                    
+
                     [
                         'actions' => ['data-error',],
                         'allow' => true,
                         'roles' => ['User'],
                     ],
-                    
                 ],
             ],
-            
-            
         ];
     }
-    
+
     public function actionIndex() {
         $query = SysFiles::find()->where(['note1' => 'y']);
         $countQuery = clone $query;
@@ -96,12 +93,16 @@ class DefaultController extends Controller {
                     'byear' => $byear
         ]);
     }
-    
-    public function actionDataError($filename = NULL, $hospcode = NULL,$from=NULL) {
-        
-        ini_set('max_execution_time', 0);   
+
+    public function actionDataError($filename = NULL, $hospcode = NULL, $from = NULL) {
+        if (!MyHelper::user_can('Pm')) {
+             $hospcode = MyHelper::getUserHoscode(\Yii::$app->user->id);
+        }
+      
+
+        ini_set('max_execution_time', 0);
         ini_set('memory_limit', '2048M');
-        
+
         if (empty($filename)) {
             return $this->redirect(['index']);
         }
@@ -135,20 +136,20 @@ class DefaultController extends Controller {
                     'filename' => $filename,
                     'dataProvider' => $dataProvider,
                     'hospcode' => $hospcode,
-                    'from'=>$from
+                    'from' => $from
         ]);
     }
-    
-    public function actionHosFile($hospcode,$byear=NULL) {
-        if(empty($byear)){
-        $sql = "SELECT t.HOSPCODE,t.FILE,t.TOTAL,t.ERR,100 - ROUND(t.ERR*100/t.TOTAL,2) as 'QC'  
+
+    public function actionHosFile($hospcode, $byear = NULL) {
+        if (empty($byear)) {
+            $sql = "SELECT t.HOSPCODE,t.FILE,t.TOTAL,t.ERR,100 - ROUND(t.ERR*100/t.TOTAL,2) as 'QC'  
          FROM err_zhos t where  t.HOSPCODE = '$hospcode' ";
-        }else{
-          $sql = "SELECT t.HOSPCODE,t.FILE,t.TOTAL,(t.ERR+t.ERR_DATE) as ERR,100 - ROUND((t.ERR+t.ERR_DATE)*100/t.TOTAL,2) as 'QC'  
-         FROM err_zall t where  t.HOSPCODE = '$hospcode' AND t.BYEAR = '$byear' ";  
+        } else {
+            $sql = "SELECT t.HOSPCODE,t.FILE,t.TOTAL,(t.ERR+t.ERR_DATE) as ERR,100 - ROUND((t.ERR+t.ERR_DATE)*100/t.TOTAL,2) as 'QC'  
+         FROM err_zall t where  t.HOSPCODE = '$hospcode' AND t.BYEAR = '$byear' ";
         }
-        
-        
+
+
         try {
             $rawData = \Yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -169,7 +170,7 @@ class DefaultController extends Controller {
         return $this->render('hos-file', [
                     'dataProvider' => $dataProvider,
                     'hospcode' => $hospcode,
-                    'byear'=>$byear
+                    'byear' => $byear
         ]);
     }
 

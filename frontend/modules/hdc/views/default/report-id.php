@@ -139,6 +139,9 @@ $form = ActiveForm::begin([
         $sp_indiv = "CREATE PROCEDURE hdc_indiv_$id()\r\n";
         $sp_indiv.=" BEGIN \r\n";
         $sp_indiv.= trim($sql_indiv);
+        if(!MyHelper::user_can('Pm')){
+            $hospcode = MyHelper::getUserHoscode(\Yii::$app->user->id);
+        }
         if (!empty($hospcode)) {
             $sp_indiv.= " AND t.HOSPCODE in ($hospcode) ";
         }
@@ -169,23 +172,22 @@ $form = ActiveForm::begin([
 
     $note_indiv = Hdcsql::find()->where(['rpt_id' => $id])->one();
     $note_indiv = $note_indiv->note_indiv;
-    if (MyHelper::user_can_own($hospcode)) {
-        echo GridView::widget([
-            'dataProvider' => $dataProvider,
-            'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
-            'responsive' => false,
-            'hover' => true,
-            'panel' => [
-                'before' => $note_indiv,
-                'type' => 'danger',
-                'heading' => "$rpt (รายคน)"
-            ],
-            'export' => [
-                'showConfirmAlert' => false,
-                'target' => '_blank'
-            ],
-        ]);
-    }
+
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+        'responsive' => false,
+        'hover' => true,
+        'panel' => [
+            'before' => $note_indiv,
+            'type' => 'danger',
+            'heading' => "$rpt (รายคน)"
+        ],
+        'export' => [
+            'showConfirmAlert' => false,
+            'target' => '_blank'
+        ],
+    ]);
     ?>
 </div>
 
