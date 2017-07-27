@@ -12,16 +12,16 @@ use yii\filters\AccessControl;
  */
 class DefaultController extends Controller {
 
-      public function behaviors() {
+    public function behaviors() {
 
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['tambon'],
+                //'only' => ['map'],
                 'rules' => [
 
                     [
-                        'actions' => ['tambon',],
+                        //'actions' => ['map',],
                         'allow' => true,
                         'roles' => ['User'],
                     ],
@@ -29,12 +29,19 @@ class DefaultController extends Controller {
             ],
         ];
     }
+
     public function actionIndex() {
         return $this->render('index');
     }
 
     public function actionPointHome() {
-        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $sql = "SELECT t.HOSPCODE,t.HID
+,concat(t.CHANGWAT,t.AMPUR,t.TAMBON) TAMBON
+,concat(t.CHANGWAT,t.AMPUR,t.TAMBON,t.VILLAGE) VILLAGE
+,t.HOUSE ,t.LATITUDE,t.LONGITUDE
+FROM home t WHERE t.LATITUDE*1 > 0 AND t.LONGITUDE*1 > 0";
 
         $home_point[] = [
             'type' => 'Feature',
@@ -48,50 +55,11 @@ class DefaultController extends Controller {
                 'coordinates' => [99.9124456, 16.14523]
             ]
         ];
-        $home_point[] = [
-            'type' => 'Feature',
-            'properties' => [
-                'NAME' => 'นาย ข.',
-                'marker-color' => "#3399ff", //สี
-                "marker-size" => "large", //ขนาด
-                //'title' => 'ไตเติ้ล',
-                'description' => 'รายละเอียด....',
-                "marker-symbol" => "h"//สัญลักษณ์
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' => [100.1124456, 16.04523]
-            ]
-        ];
 
         return json_encode($home_point);
     }
 
     public function actionMap() {
-
-
-        $peron_point[] = [
-            'type' => 'Feature',
-            'properties' => [
-                'NAME' => 'นาย ก.',
-                'title' => 'ไตเติ้ล',
-                'description' => 'รายละเอียด....',
-                'marker-color' => "#fc4353", //สี
-                "marker-size" => "large", //ขนาด
-                "marker-symbol" => "p"//สัญลักษณ์
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' => [100.0124456, 16.14523]
-            ]
-        ];
-        $peron_point = json_encode($peron_point);
-        return $this->renderPartial('map', [
-                    'person_point' => $peron_point,
-        ]);
-    }
-
-    public function actionTambon() {
         MyHelper::overclock();
         $sys = MyHelper::getSysConfig();
         if ($sys) {
@@ -123,7 +91,7 @@ class DefaultController extends Controller {
         }
         $tambon_pol = json_encode($tambon_pol);
 
-        return $this->renderPartial('tambon', [
+        return $this->renderPartial('map', [
                     'tambon_pol' => $tambon_pol
         ]);
     }
