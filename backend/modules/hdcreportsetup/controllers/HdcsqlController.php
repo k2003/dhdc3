@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use components\MyHelper;
+use yii\filters\AccessControl;
 
 
 class HdcsqlController extends Controller {
@@ -23,8 +24,22 @@ class HdcsqlController extends Controller {
                     'delete' => ['post'],
                 ],
             ],
+            
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [],
+                'rules' => [
+                    [
+                        //'actions' => ['*'],
+                        'allow' => true,
+                        'roles' => ['Admin'],
+                    ],
+                ],
+            ],
         ];
     }
+    
+    
 
     
 

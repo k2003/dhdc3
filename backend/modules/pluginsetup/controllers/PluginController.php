@@ -8,6 +8,7 @@ use backend\modules\pluginsetup\models\SysDhdcPluginSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * PluginController implements the CRUD actions for SysDhdcPlugin model.
@@ -24,6 +25,17 @@ class PluginController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [],
+                'rules' => [
+                    [
+                        //'actions' => ['*'],
+                        'allow' => true,
+                        'roles' => ['Admin'],
+                    ],
                 ],
             ],
         ];

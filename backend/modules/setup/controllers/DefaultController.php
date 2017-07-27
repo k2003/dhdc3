@@ -6,6 +6,7 @@ use yii\web\Controller;
 use common\models\config\SysConfigMain;
 use common\models\config\Campur;
 use components\MyHelper;
+use yii\filters\AccessControl;
 
 /**
  * Default controller for the `setup` module
@@ -16,6 +17,22 @@ class DefaultController extends Controller {
      * Renders the index view for the module
      * @return string
      */
+    public function behaviors() {
+
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [],
+                'rules' => [
+                    [
+                        //'actions' => ['*'],
+                        'allow' => true,
+                        'roles' => ['Admin'],
+                    ],
+                ],
+            ],
+        ];
+    }
     public function actionIndex() {
         $model = SysConfigMain::find()->one();
         if (\Yii::$app->request->isPost) {

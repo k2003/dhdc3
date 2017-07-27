@@ -8,6 +8,7 @@ use common\models\config\TranformLog;
 use backend\models\SysCheckProcess;
 use common\models\config\SysProcessRunning;
 use components\MyHelper;
+use yii\filters\AccessControl;
 
 /**
  * Default controller for the `gate` module
@@ -18,6 +19,23 @@ class DefaultController extends Controller {
      * Renders the index view for the module
      * @return string
      */
+    
+      public function behaviors() {
+
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [],
+                'rules' => [
+                    [
+                        //'actions' => ['*'],
+                        'allow' => true,
+                        'roles' => ['Admin'],
+                    ],
+                ],
+            ],
+        ];
+    }
     public function actionIndex() {
         $sql = "SHOW FULL PROCESSLIST;";
         $raw = \Yii::$app->db->createCommand($sql)->queryAll();
