@@ -1,6 +1,6 @@
 ﻿1.การติดตั้ง module 
 1.1 แตกไฟล์ module ไว้ที่ dhdc3/modules
-1.2 เพิ่มรายการ module ที่ติดตั้งใหม่ในไฟล์ dhdc4/modules/add_modules.php
+1.2 เพิ่มรายการ module ที่ติดตั้งใหม่ในไฟล์ dhdc3/modules/add_modules.php
 1.3 เข้าหน้าจอ Backend - Plugins - เพิ่ม  
 1.3.1 ตั้ง Name ที่ต้องการความยาวไม่เกิน 50 อักษร
 1.3.2 ตั้ง Module Name ตัวแรกเป็นตัวพิมพ์ใหญ่ ตามคำแนะนำของผู้พัฒนา module
