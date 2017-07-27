@@ -1,22 +1,27 @@
-<?php ?>
+<?php
+$web = \Yii::getAlias('@web');
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset=utf-8 />
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
         <title>DHDC 3.0 GIS</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-        <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
-        <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 
-        <script src="<?= \Yii::getAlias('@web') ?>/js/Leaflet.Control.Custom.js"></script>        
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link href='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+        <script src='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+
+        <script src='//api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.js'></script>
+        <link href='//api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.4.10/leaflet.draw.css' rel='stylesheet' />
+
+
+        <script src="<?= $web ?>/js/Leaflet.Control.Custom.js"></script>        
 
         <style>
             body { margin:0; padding:0; }
@@ -25,17 +30,22 @@
                 position:absolute;
                 bottom:0;
                 z-index: 10;
-               
-            }   
+
+            }
+            .leaflet-control-draw-measure {
+                background-image: url(<?=$web?>/images/measure-control.png);
+            }
         </style>
     </head>
     <body>
-        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+        <script src='//api.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+        <link rel="stylesheet" href="<?=$web?>/lib/map/ruler/leaflet-ruler.css" />
+        <script src="<?=$web?>/lib/map/ruler/leaflet-ruler.js"></script>
         <div id='map'>         
         </div>
-           <div class="show-latlng">
-                <input type="text" id="txt-latlng" style="width: 290px"/>
-            </div>
+        <div class="show-latlng">
+            <input type="text" id="txt-latlng" style="width: 290px"/>
+        </div>
         <script>
             L.mapbox.accessToken = 'pk.eyJ1IjoidGVobm5uIiwiYSI6ImNpZzF4bHV4NDE0dTZ1M200YWxweHR0ZzcifQ.lpRRelYpT0ucv1NN08KUWQ';
             var map = L.mapbox.map('map').setView([16, 100], 6);
@@ -136,6 +146,7 @@
                     layer.openPopup();
                 });
             });
+            L.control.ruler({position: 'topleft'}).addTo(map);
 
             L.control.custom({
                 position: 'topleft',
@@ -174,7 +185,6 @@
             crosshair = new L.marker(map.getCenter(), {icon: crosshairIcon, clickable: false});
             crosshair.addTo(map);
 
-// Move the crosshair to the center of the map when the user pans
             map.on('move', function (e) {
                 crosshair.setLatLng(map.getCenter());
 
@@ -182,10 +192,10 @@
 
             map.on('moveend', function (e) {
                 var latlng = crosshair.getLatLng();
-                $('#txt-latlng').val(latlng.lat+","+latlng.lng)
+                $('#txt-latlng').val(latlng.lat + "," + latlng.lng)
             });
-            $('#txt-latlng').val(map.getCenter().lat+","+map.getCenter().lng)
-            $('#txt-latlng').click(function(e){
+            $('#txt-latlng').val(map.getCenter().lat + "," + map.getCenter().lng)
+            $('#txt-latlng').click(function (e) {
                 $(this).select();
             });
         </script>
