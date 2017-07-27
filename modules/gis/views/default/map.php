@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 $web = \Yii::getAlias('@web');
 ?>
@@ -140,10 +141,10 @@ $json_home_route = Url::to(['point-home']);
                         var countHome = resGeojson.features.length;
                         var list = "";
                         resGeojson.features.forEach(function (data) {
-                            list += "<br> เลขที่ " + data.properties.title;
+                            list += "บ้านเลขที่ " + data.properties.title+"<br>";
                         });
-                        alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
-
+                        //alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
+                        $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด "+countHome+" หลัง</h4><br>"+list);
 
                     })
                 });
@@ -268,5 +269,15 @@ $json_home_route = Url::to(['point-home']);
                 data.layer.openPopup();
             });
         </script>
+        
+          <?php
+        Modal::begin([
+            'header' => 'บ้านที่อยู่ในรัศมี',
+            'size' => 'modal-md',
+            'id' => 'modal',
+        ]);
+        echo "<div id='modalContent'>Loading...</div>";
+        Modal::end();
+        ?>
     </body>
 </html>
