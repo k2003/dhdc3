@@ -14,6 +14,9 @@ return [
     'correct' => [
         'class' => 'modules\correct\Correct',
     ],
+    'vaccine' => [
+        'class' => 'modules\vaccine\Vaccine',
+    ],
 ];
 
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace modules\smcread\controllers;
+namespace modules\vaccine\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `smcread` module
+ * Default controller for the `vaccine` module
  */
 class DefaultController extends Controller
 {
@@ -15,7 +15,6 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        
         return $this->render('index');
     }
 }

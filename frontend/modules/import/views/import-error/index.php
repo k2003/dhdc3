@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = 'ข้อผิดพลาด';
 
    
     <?= GridView::widget([
+        'responsiveWrap'=>false,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

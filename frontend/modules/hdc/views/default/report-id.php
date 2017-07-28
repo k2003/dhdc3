@@ -176,7 +176,7 @@ $form = ActiveForm::begin([
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
-        'responsive' => false,
+        'responsiveWrap'=>false,
         'hover' => true,
         'panel' => [
             'before' => $note_indiv,
