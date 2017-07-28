@@ -102,6 +102,15 @@ $web = \Yii::getAlias('@web');
                 "Google ภูมิประเทศ": googleTerrain,
             }; // base map 
 
+            //crosshair
+            var crosshairIcon = L.icon({
+                iconUrl: "<?=$web?>/images/crosshair.png",
+                iconSize: [25, 25], // size of the icon
+                //iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+            });
+            crosshair = new L.marker(map.getCenter(), {icon: crosshairIcon, clickable: false});
+            crosshair.addTo(map);
+
 
 
 
@@ -202,7 +211,7 @@ $json_hosp_route = Url::to(['point-hosp']);
             hospital.on('ready', function (e) {
                 var json = e.target.getGeoJSON();
                 json.forEach(function (feature) {
-                    var pointHosp = L.mapbox.featureLayer();                    
+                    var pointHosp = L.mapbox.featureLayer();
                     pointHosp.bindTooltip(feature.properties.title);
                     pointHosp.setGeoJSON(feature);
                     pointHosp.addTo(hospitalGroup);
@@ -296,14 +305,7 @@ $json_hosp_route = Url::to(['point-hosp']);
             });
 
 
-            //crosshair
-            var crosshairIcon = L.icon({
-                iconUrl: "<?= \Yii::getAlias('@web') ?>/images/crosshair.png",
-                iconSize: [25, 25], // size of the icon
-                //iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-            });
-            crosshair = new L.marker(map.getCenter(), {icon: crosshairIcon, clickable: false});
-            crosshair.addTo(map);
+
 
             map.on('move', function (e) {
                 crosshair.setLatLng(map.getCenter());
