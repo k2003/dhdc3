@@ -12,17 +12,18 @@ use yii\filters\AccessControl;
 class RunqueryController extends Controller {
 
     public $enableCsrfValidation = false;
-    
+
     public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                //'only' => ['data-error'],
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        //'actions' => ['data-error',],
                         'allow' => true,
                         'roles' => ['User'],
-                    ]                    
+                    ],
                 ],
             ],
         ];
@@ -48,8 +49,6 @@ class RunqueryController extends Controller {
         return $rawData;
     }
 
-
-
     public function actions() {
         return [
             'error' => [
@@ -59,7 +58,6 @@ class RunqueryController extends Controller {
     }
 
     public function actionIndex() {
-        
 
         $saved = false;
         if (\Yii::$app->request->isPost) {
@@ -77,7 +75,7 @@ class RunqueryController extends Controller {
                 $break = true;
             }
             if (strtolower(substr($sql, 0, 6)) === 'update') {
-                $break = true;           
+                $break = true;
             }
             if (strpos($sql, 'alter') !== false) {
                 $break = true;
