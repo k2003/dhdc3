@@ -11,14 +11,13 @@
 <p> For User
 <p> <b>ขั้นตอนการติดตั้ง</b>
 <p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci
-<p>(2) ติดตั้ง dhdc3 ที่ wwwroot (git clone & composer install)
+<p>(2) แตกไฟล์ dhdc3 ที่ wwwroot 
 <p>(3) ตั้งค่าการเชื่อมต่อฐานข้อมูล dhdc3 ที่ common/config/connect_database.php
-<p>(3.1) Restore ฐานตั้งต้น dhdc3 ที่ http://203.157.118.125/dhdc3_product
-<p>(3.2) Restore ไฟล์ components/rbac/rbac_20170620.sql เข้าฐาน dhdc3
-<p>(4) Login = admin ,123456
-<p>(5) จัดการระบบ - ตั้งค่าอำเภอ 
-<p>(6) จัดการระบบ - tranform 
-<p>(7) กรณีมีฐาน 53 แฟ้ม อยู่ก่อนหน้า ให้ copy เฉพาะตาราง 53 แฟ้ม มาใส่ในฐาน dhdc3
+<p>(4) Restore ฐานข้อมูลตั้งต้น เลขตามหมายเลข
+<p>(5) กรณีมีฐาน 53 แฟ้ม อยู่ก่อนหน้า ให้ copy เฉพาะตาราง 53 แฟ้ม มาใส่ในฐาน dhdc3
+<p>(6) Login = admin ,123456
+<p>(6) จัดการระบบ - ตั้งค่าอำเภอ 
+<p>(7) จัดการระบบ - tranform กด 1-2-3
 <p>(8) จัดการระบบ - จัดการผู้ใช้ -create new user
 <hr>
 <p><b>Linux</b>
