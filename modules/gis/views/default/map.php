@@ -46,6 +46,7 @@ $web = \Yii::getAlias('@web');
             .leaflet-control-draw-measure {
                 background-image: url(<?= $web ?>/images/measure-control.png);
             }
+            .point-label {  white-space: nowrap;background:null;}
         </style>
     </head>
     <body>
@@ -114,8 +115,10 @@ $web = \Yii::getAlias('@web');
 $json_home_route = Url::to(['point-home']);
 ?>
             var home = L.mapbox.featureLayer().loadURL('<?= $json_home_route ?>');
+            var labelHomeLayer = L.featureGroup().addTo(map);
             home.on('ready', function () {
                 home.addTo(clusterHome);
+
                 $('.btn-circle').click(function () {
                     var r = prompt("ระบุรัศมี (เมตร)", 100);
                     var circleRadius = L.circle(map.getCenter(), Number(r), {color: 'yellow', 'dashArray': 4, weight: 2}).addTo(map);
@@ -140,11 +143,19 @@ $json_home_route = Url::to(['point-home']);
                         var resGeojson = turf.within(homeCollection, circleCollection);
                         var countHome = resGeojson.features.length;
                         var list = "";
+                        //labelHomeLayer.remove();
                         resGeojson.features.forEach(function (data) {
-                            list += "บ้านเลขที่ " + data.properties.title+"<br>";
+                            list += "บ้านเลขที่ " + data.properties.title + "<br>";
+                            
+                            var latLng = [data.geometry.coordinates[1], data.geometry.coordinates[0]];
+                            var lbHtml = '<span style="background-color:#FFF8DC;">';
+                            lbHtml += data.properties.title;                           
+                            lbHtml += '<span>';
+                            L.marker(latLng, {icon: L.divIcon({className: 'point-label', html: lbHtml})}).addTo(labelHomeLayer);
+
                         });
                         //alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
-                        $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด "+countHome+" หลัง</h4><br>"+list);
+                        $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด " + countHome + " หลัง</h4><br>" + list);
 
                     })
                 });
@@ -269,8 +280,8 @@ $json_home_route = Url::to(['point-home']);
                 data.layer.openPopup();
             });
         </script>
-        
-          <?php
+
+        <?php
         Modal::begin([
             'header' => 'บ้านที่อยู่ในรัศมี',
             'size' => 'modal-md',
