@@ -6,6 +6,7 @@ use yii\web\Controller;
 use modules\gis\models\GisDhdcTambon;
 use components\MyHelper;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
 
 /**
  * Default controller for the `mapbox` module
@@ -32,6 +33,20 @@ class DefaultController extends Controller {
 
     public function actionIndex() {
         return $this->render('index');
+    }
+    
+    public function actionPointVill(){
+        $amp = MyHelper::getSysConfig()->district_code;
+        $sql = "SELECT * from gis_villages t WHERE t.properties like '{\"DOLACODE\":\"$amp%'";
+        $raw = \Yii::$app->db->createCommand($sql)->queryAll();
+        $point = [];
+         foreach ($raw as $value) {
+             $vill['type']=$value['type'];
+             $vill['properties']=json_decode($value['properties']);
+             $vill['geometry']=  json_decode($value['geometry']);
+             $point[]=$vill;
+         }
+         return Json::encode($point);
     }
 
     public function actionPointHome() {

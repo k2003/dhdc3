@@ -72,19 +72,19 @@ $web = \Yii::getAlias('@web');
 
             var clusterHome = new L.MarkerClusterGroup().addTo(map);
             //base map
-            var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+            var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}&hl=th', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
-            var googleStreet = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            var googleStreet = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=th', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
-            var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}&hl=th', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
-            var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+            var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}&hl=th', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
@@ -94,25 +94,33 @@ $web = \Yii::getAlias('@web');
 
 
             var baseLayers = {
-                "OSM ภูมิประเทศ": osm_street.addTo(map),
+                "OSM ภูมิประเทศ": osm_street,
                 "OSM ถนน": L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png'),
                 "OSM ดาวเทียม": L.mapbox.tileLayer('mapbox.satellite'),
                 "Google Hybrid": googleHybrid,
-                "Google Street": googleStreet,
+                "Google Street": googleStreet.addTo(map),
                 "Google ภูมิประเทศ": googleTerrain,
             }; // base map 
 
 
 
-            var _group1 = L.featureGroup().addTo(map);
+
+            var villGroup = L.featureGroup();
+            var tambonGroup = L.featureGroup().addTo(map)
 
             var tambon = L.mapbox.featureLayer()
-                    .setGeoJSON(<?= $tambon_pol ?>)
-                    .addTo(_group1);
+                    .setGeoJSON(<?= $tambon_pol ?>);                    
+            tambon.eachLayer(function(layer){
+                var json = layer.feature;
+                var feature =L.mapbox.featureLayer(json);
+                feature.bindTooltip(json.properties.title, {permanent: 'true'});
+                feature.addTo(tambonGroup);
+            });
 
             map.fitBounds(tambon.getBounds());
 <?php
 $json_home_route = Url::to(['point-home']);
+$json_vill_route = Url::to(['point-vill']);
 ?>
             var home = L.mapbox.featureLayer().loadURL('<?= $json_home_route ?>');
             var labelHomeLayer = L.featureGroup().addTo(map);
@@ -146,10 +154,10 @@ $json_home_route = Url::to(['point-home']);
                         //labelHomeLayer.remove();
                         resGeojson.features.forEach(function (data) {
                             list += "บ้านเลขที่ " + data.properties.title + "<br>";
-                            
+
                             var latLng = [data.geometry.coordinates[1], data.geometry.coordinates[0]];
                             var lbHtml = '<span style="background-color:#FFF8DC;">';
-                            lbHtml += data.properties.title;                           
+                            lbHtml += data.properties.title;
                             lbHtml += '<span>';
                             L.marker(latLng, {icon: L.divIcon({className: 'point-label', html: lbHtml})}).addTo(labelHomeLayer);
 
@@ -161,6 +169,32 @@ $json_home_route = Url::to(['point-home']);
                 });
             })
 
+            var villages = L.mapbox.featureLayer().loadURL('<?= $json_vill_route ?>');
+            villages.on('ready', function () {
+                villages.eachLayer(function (layer) {
+                    var latLng = [layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]];
+                    var tambon_code = layer.feature.properties.DOLACODE.substring(0, 6)*1;
+                    var marker_vill = L.marker(latLng, {
+                        icon: L.mapbox.marker.icon({
+                            'marker-symbol': 'circle-stroked',
+                            'marker-color': tambon_code%2==0?'#7CFC00':'#87CEFA',
+                            'marker-size': 'large'
+                        }),
+                    });
+                    var title = "หมู่ที่ " + layer.feature.properties.VILL_NO;
+                    title += " บ." + layer.feature.properties.MUBAN;
+                    title += "<br>ต." + layer.feature.properties.TAMBOL;
+
+                    var tips = "หมู่ที่ " + layer.feature.properties.VILL_NO;
+                    tips += " บ." + layer.feature.properties.MUBAN;
+
+                    //marker_vill.bindPopup(title);
+                    marker_vill.bindTooltip(tips, {permanent: 'true'});
+                    marker_vill.addTo(villGroup);
+                });
+
+            });
+
             //wms
 
             //ฝน
@@ -170,7 +204,7 @@ $json_home_route = Url::to(['point-home']);
             var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459"]';
             var d = new Date();
             var time = d.getTime();
-            console.log(time);
+            //console.log(time);
             radars = JSON.parse(radars);
             latlng_topright = JSON.parse(latlng_topright);
             latlng_bottomleft = JSON.parse(latlng_bottomleft);
@@ -178,7 +212,7 @@ $json_home_route = Url::to(['point-home']);
             $.each(radars, function (key, value) {
                 var top_right = latlng_topright[key].split(",");
                 var bottom_left = latlng_bottomleft[key].split(",");
-                console.log(base_url + "/output/" + value + ".png?" + time);
+                //console.log(base_url + "/output/" + value + ".png?" + time);
                 var imageUrl = base_url + "/output/" + value + ".png?" + time,
                         imageBounds = [[top_right[0], top_right[1]], [bottom_left[0], bottom_left[1]]];
                 L.imageOverlay(imageUrl, imageBounds).addTo(rain).setOpacity(0.95);
@@ -190,7 +224,8 @@ $json_home_route = Url::to(['point-home']);
 
             var overlays = {
                 'หลังคาเรือน': clusterHome,
-                'ขอบเขตตำบล': tambon,
+                'ขอบเขตตำบล': tambonGroup,
+                'หมู่บ้าน': villGroup,
                 'เรดาห์น้ำฝน': rain,
             };
             L.control.layers(baseLayers, overlays).addTo(map);
