@@ -106,13 +106,14 @@ $web = \Yii::getAlias('@web');
 
 
             var villGroup = L.featureGroup();
-            var tambonGroup = L.featureGroup().addTo(map)
+            var tambonGroup = L.featureGroup().addTo(map);
+            var hospitalGroup = L.featureGroup().addTo(map);
 
             var tambon = L.mapbox.featureLayer()
-                    .setGeoJSON(<?= $tambon_pol ?>);                    
-            tambon.eachLayer(function(layer){
+                    .setGeoJSON(<?= $tambon_pol ?>);
+            tambon.eachLayer(function (layer) {
                 var json = layer.feature;
-                var feature =L.mapbox.featureLayer(json);
+                var feature = L.mapbox.featureLayer(json);
                 feature.bindTooltip(json.properties.title, {permanent: 'true'});
                 feature.addTo(tambonGroup);
             });
@@ -121,6 +122,7 @@ $web = \Yii::getAlias('@web');
 <?php
 $json_home_route = Url::to(['point-home']);
 $json_vill_route = Url::to(['point-vill']);
+$json_hosp_route = Url::to(['point-hosp']);
 ?>
             var home = L.mapbox.featureLayer().loadURL('<?= $json_home_route ?>');
             var labelHomeLayer = L.featureGroup().addTo(map);
@@ -173,11 +175,11 @@ $json_vill_route = Url::to(['point-vill']);
             villages.on('ready', function () {
                 villages.eachLayer(function (layer) {
                     var latLng = [layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]];
-                    var tambon_code = layer.feature.properties.DOLACODE.substring(0, 6)*1;
+                    var tambon_code = layer.feature.properties.DOLACODE.substring(0, 6) * 1;
                     var marker_vill = L.marker(latLng, {
                         icon: L.mapbox.marker.icon({
                             'marker-symbol': 'circle-stroked',
-                            'marker-color': tambon_code%2==0?'#7CFC00':'#87CEFA',
+                            'marker-color': tambon_code % 2 == 0 ? '#7CFC00' : '#87CEFA',
                             'marker-size': 'large'
                         }),
                     });
@@ -193,6 +195,19 @@ $json_vill_route = Url::to(['point-vill']);
                     marker_vill.addTo(villGroup);
                 });
 
+            });
+
+            var hospital = L.mapbox.featureLayer();
+            hospital.loadURL('<?= $json_hosp_route ?>');
+            hospital.on('ready', function (e) {
+                var json = e.target.getGeoJSON();
+                json.forEach(function (feature) {
+                    var pointHosp = L.mapbox.featureLayer();                    
+                    pointHosp.bindTooltip(feature.properties.title);
+                    pointHosp.setGeoJSON(feature);
+                    pointHosp.addTo(hospitalGroup);
+
+                })
             });
 
             //wms
@@ -223,6 +238,7 @@ $json_vill_route = Url::to(['point-vill']);
             //จบ wms
 
             var overlays = {
+                'โรงพยาบาล': hospitalGroup,
                 'หลังคาเรือน': clusterHome,
                 'ขอบเขตตำบล': tambonGroup,
                 'หมู่บ้าน': villGroup,

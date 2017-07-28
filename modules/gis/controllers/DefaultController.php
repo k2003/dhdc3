@@ -35,7 +35,27 @@ class DefaultController extends Controller {
         return $this->render('index');
     }
     
-    public function actionPointVill(){
+    public function actionPointHosp(){
+        $sql = "SELECT h.hoscode,h.hosname,t.lat,t.lon from geojson t
+INNER  JOIN chospital_amp h  on h.hoscode = t.hcode";
+        $raw = \Yii::$app->db->createCommand($sql)->queryAll();
+        $point = [];
+         foreach ($raw as $value) {
+             $p['type']='Feature';
+             $p['properties']['title']=$value['hoscode']."-".$value['hosname'];
+             $p['properties']['marker-size']='large';
+             $p['properties']['marker-color']='#FF4500';
+             $p['properties']['marker-symbol']='hospital';
+             $p['geometry']['type']="Point";
+             $p['geometry']['coordinates'][0]=$value['lon']*1  ;
+             $p['geometry']['coordinates'][1]=$value['lat']*1  ;
+             $point[]=$p;
+         }
+         return Json::encode($point);
+        
+    }
+
+        public function actionPointVill(){
         $amp = MyHelper::getSysConfig()->district_code;
         $sql = "SELECT * from gis_villages t WHERE t.properties like '{\"DOLACODE\":\"$amp%'";
         $raw = \Yii::$app->db->createCommand($sql)->queryAll();
