@@ -13,7 +13,7 @@
 <p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci
 <p>(2) ติดตั้ง dhdc3 ที่ wwwroot (git clone & composer install)
 <p>(3) ตั้งค่าการเชื่อมต่อฐานข้อมูล dhdc3 ที่ common/config/connect_database.php
-<p>(3.1) Restore ฐานตั้งต้น dhdc3 ที่ http://203.157.118.123:88/dhdc3_setup_416t_97p.zip
+<p>(3.1) Restore ฐานตั้งต้น dhdc3 ที่ http://203.157.118.125/dhdc3_product
 <p>(3.2) Restore ไฟล์ components/rbac/rbac_20170620.sql เข้าฐาน dhdc3
 <p>(4) Login = admin ,123456
 <p>(5) จัดการระบบ - ตั้งค่าอำเภอ 
