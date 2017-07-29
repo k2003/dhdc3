@@ -32,7 +32,7 @@ class DefaultController extends Controller {
     }
 
     public function actionIndex() {
-        return $this->render('index');
+        return $this->redirect(['map']);
     }
     
     public function actionPointHosp(){
@@ -114,13 +114,14 @@ WHERE t.LATITUDE*1 > 0 AND t.LONGITUDE*1 > 0';
             $tambon_pol[] = [
                 'type' => 'Feature',
                 'properties' => [
-                    'fill' => call_user_func(function()use($value) {
+                    /*'fill' => call_user_func(function()use($value) {
                                 if ($value->TAM_CODE % 2 == 0)
                                     return '#4169e1';
                                 if ($value->TAM_CODE % 3 == 0)
                                     return '#ffd700';
                                 return '#00ff7f';
-                            }),
+                            }),*/
+                    //'fillOpacity'=>1,
                     'title' => "ต." . $value['TAM_NAMT'],
                 ],
                 'geometry' => [
