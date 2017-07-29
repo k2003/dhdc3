@@ -34,7 +34,12 @@ class TransformController extends Controller {
     }
 
     protected function transform_init() {
-        $this->exec_sql("CALL sys_clone_report;");
+        // clone report
+        $this->exec_sql("REPLACE INTO sys_reportcategory_dhdc (SELECT * from sys_reportcategory);");
+        $this->exec_sql("DROP TABLE IF EXISTS sys_report_dhdc;");
+        $this->exec_sql("CREATE TABLE sys_report_dhdc (SELECT * FROM sys_report t WHERE t.id NOT IN (SELECT id FROM sys_report_drop));");
+        $this->exec_sql("UPDATE sys_report_drop t ,sys_report_dhdc s set t.rpt = s.report_name WHERE t.id = s.id;");
+        //end clone
         
         $sql = " CREATE TABLE IF NOT EXISTS `sys_transform_all` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
