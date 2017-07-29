@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\sqlquery\models;
+namespace modules\sqlquery\models;
 
 use Yii;
 use yii\base\Model;
