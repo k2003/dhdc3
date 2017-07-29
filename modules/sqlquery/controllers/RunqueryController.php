@@ -8,6 +8,7 @@ use yii\base\ErrorException;
 use yii\web\Controller;
 use modules\sqlquery\models\Sqlscript;
 use yii\filters\AccessControl;
+use components\MyHelper;
 
 class RunqueryController extends Controller {
 
@@ -21,7 +22,7 @@ class RunqueryController extends Controller {
                 'rules' => [
                     [
                         //'actions' => ['data-error',],
-                        'allow' => true,
+                        'allow' => MyHelper::modIsOn(),
                         'roles' => ['User'],
                     ],
                 ],

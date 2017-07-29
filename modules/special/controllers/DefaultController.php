@@ -4,6 +4,7 @@ namespace modules\special\controllers;
 
 use yii\web\Controller;
 use yii\filters\AccessControl;
+use components\MyHelper;
 
 /**
  * Default controller for the `special` module
@@ -16,7 +17,7 @@ class DefaultController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'allow' => true,
+                        'allow' => MyHelper::modIsOn(),
                         'roles' => ['User']
                     ],
                 ]

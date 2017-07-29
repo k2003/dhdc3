@@ -23,7 +23,7 @@ class DefaultController extends Controller {
 
                     [
                         //'actions' => ['map',],
-                        'allow' => true,
+                        'allow' => MyHelper::modIsOn(),
                         'roles' => ['User'],
                     ],
                 ],
