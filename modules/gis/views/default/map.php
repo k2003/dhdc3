@@ -124,7 +124,7 @@ $web = \Yii::getAlias('@web');
                 var json = layer.feature;
                 var feature = L.mapbox.featureLayer(json);
                 feature.bindTooltip(json.properties.title, {permanent: 'true'});
-                feature.setStyle({fillOpacity:0,dashArray:3});
+                feature.setStyle({weight:1,fillOpacity:0,dashArray:4});
                 feature.addTo(tambonGroup);
             });
 
