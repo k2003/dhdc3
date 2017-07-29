@@ -13,7 +13,7 @@
 <p>(9) Linux OS แก้ไข httpd.conf  ส่วน AllowOverRide  All
 
 <hr>
-#GIT Sync
+<p>Programmer Section
 <p> (1) git -commit
 <p> (2) git -remote -push หรือ git -remote -push to upstream ( ถ้า push ไม่ได้ให้ merge หรือ ทำข้อ (2.1) แล้วทำข้อ (3) )
 <p> (2.1) git -remote -pull -merge
