@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = "$cat_name";
 ?>
 
 <div class="alert alert-danger">
-    <h4>รายงานโดยใช้หลักการเดียวกับ HDC กระทรวงสาธารณสุข</h4>
+    <h4>ประมวลผลรายงานโดยใช้หลักการแบบเดียวกับ HDC กระทรวงสาธารณสุข</h4>
 </div>
 
 <?php
