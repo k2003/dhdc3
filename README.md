@@ -1,4 +1,4 @@
-#DHDC 3.0 Plugable PM:Utehn Jadyangtone DHDC Team
+#DHDC 3.0 Plugable  by DHDC Team
 <hr>
 <p> <b>ขั้นตอนการติดตั้ง</b>
 <p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci
