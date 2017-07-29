@@ -14,16 +14,31 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
         <div class="panel-body">
             <?php
             $cid = trim(\Yii::$app->request->post('cid'));
+            $bdate = trim(\Yii::$app->request->post('bdate'));
             ?>
-            <?php $form = ActiveForm::begin(); ?>
-            <?= Html::textInput('cid', $cid, ['placeholder' => 'กรุณาใส่เลข 13 หลัก']) ?>
-            <?= Html::submitButton('ค้นหา'); ?>
-
-            <?php ActiveForm::end(); ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?php $form = ActiveForm::begin(); ?>
+                    <?= Html::textInput('cid', $cid, ['placeholder' => 'เลข 13 หลัก']) ?>
+                    <?= Html::submitButton('ค้นหา'); ?>
+                    <?php ActiveForm::end(); ?>
+                </div>
+                <div class="col-md-6">
+                    <?php $form = ActiveForm::begin(); ?>
+                    เกิดระหว่าง:
+                    <?= Html::textInput('bdate_begin', '', ['placeholder' => 'วดป.เกิด']) ?>
+                    -<?= Html::textInput('bdate_end', '', ['placeholder' => 'วดป.เกิด']) ?>
+                    <?= Html::hiddenInput('bdate', 'yes') ?>
+                    <?= Html::submitButton('ค้นหา'); ?>
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
             <br>
-            <?php if ($cid): ?>
+            <?php if ($cid): ?>    
+                ผลการค้นหาด้วย 13 หลัก
                 <?php
-                $sql = "select * from t_person_epi where cid = '$cid'";
+                $sql = "SELECT p.`NAME`,p.LNAME,p.BIRTH,p.HOSPCODE,p.CID,p.TYPEAREA,p.DISCHARGE
+,t.* from t_person_epi t LEFT JOIN t_person_cid p on p.CID = t.cid  where p.CID ='$cid'";
                 try {
                     $raw = \Yii::$app->db->createCommand($sql)->queryAll();
                 } catch (\yii\db\Exception $e) {
@@ -38,6 +53,10 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
                 ]);
                 ?>
 
+            <?php endif; ?>
+
+            <?php if ($bdate): ?>
+                ผลการค้นหาด้วย วดป.เกิด:
             <?php endif; ?>
         </div>
     </div>
