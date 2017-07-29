@@ -5,7 +5,7 @@ namespace frontend\modules\sqlquery\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\modules\sqlquery\models\Sqlscript;
+use modules\sqlquery\models\Sqlscript;
 
 /**
  * SqlscriptSearch represents the model behind the search form about `frontend\models\Sqlscript`.

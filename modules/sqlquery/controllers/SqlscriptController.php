@@ -1,14 +1,14 @@
 <?php
 
-namespace frontend\modules\sqlquery\controllers;
+namespace modules\sqlquery\controllers;
 
 use Yii;
-use frontend\modules\sqlquery\models\Sqlscript;
-use frontend\modules\sqlquery\models\SqlscriptSearch;
+use modules\sqlquery\models\Sqlscript;
+use modules\sqlquery\models\SqlscriptSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use frontend\modules\sqlquery\models\UploadForm;
+use modules\sqlquery\models\UploadForm;
 use yii\web\UploadedFile;
 
 

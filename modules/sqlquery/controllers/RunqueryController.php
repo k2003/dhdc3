@@ -1,12 +1,12 @@
 <?php
 
-namespace frontend\modules\sqlquery\controllers;
+namespace modules\sqlquery\controllers;
 
 use yii;
 use yii\filters\VerbFilter;
 use yii\base\ErrorException;
 use yii\web\Controller;
-use frontend\modules\sqlquery\models\Sqlscript;
+use modules\sqlquery\models\Sqlscript;
 use yii\filters\AccessControl;
 
 class RunqueryController extends Controller {

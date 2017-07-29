@@ -56,23 +56,16 @@ if ($config) {
 
             
             $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-search"></i> รายงาน HDC', 'url' => ['/hdc/default/index']];
-            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-search"></i> DataExchange', 'url' => ['/hdcex/default/index']];
+             $rpt_mnu_itms[] = '<li class="divider"></li>';
+            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-search"></i> Data-Exchange', 'url' => ['/hdcex/default/index']];
 
-            
-            $rpt_mnu_itms[] = '<li class="divider"></li>';
-            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-map-marker"></i> ภูมิสารสนเทศ GIS', 'url' => ['/gis/default/index']];
-            
-            $rpt_mnu_itms[] = '<li class="divider"></li>';
-            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-plus"></i> ระบบงาน', 'url' => ['/plugin/default/index']];
-            
-            $rpt_mnu_itms[] = '<li class="divider"></li>';
-            $rpt_mnu_itms[] = ['label' => '<i class="glyphicon glyphicon-flash"></i> คำสั่ง SQL', 'url' => ['/sqlquery/default/index']];
-
+                 
+           
             $menuItems = [
                 ['label' => '<i class="glyphicon glyphicon-floppy-open"></i> นำเข้า', 'url' => ['/import/upload/index']],    
             ];
-            $menuItems[] = ['label' => 'ระบบงาน', 'url' => ['/plugin/default/index']];
-            $menuItems[]=['label' => '<i class="glyphicon glyphicon-list-alt"></i> รายการ', 'items' => $rpt_mnu_itms];
+            $menuItems[] = ['label' => '<i class="glyphicon glyphicon-modal-window"></i> ระบบงาน', 'url' => ['/plugin/default/index']];
+            $menuItems[]=['label' => '<i class="glyphicon glyphicon-list-alt"></i> รายงาน', 'items' => $rpt_mnu_itms];
             
             if (Yii::$app->user->isGuest) {
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];

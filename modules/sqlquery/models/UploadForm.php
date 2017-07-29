@@ -1,5 +1,5 @@
 <?php
-namespace frontend\modules\sqlquery\models;
+namespace modules\sqlquery\models;
 use yii\base\Model;
 class UploadForm extends Model
 {

@@ -20,6 +20,9 @@ return [
     'special' => [
         'class' => 'modules\special\Special',
     ],
+    'sqlquery' => [
+        'class' => 'modules\sqlquery\SqlQuery',
+    ],
 ];
 
 
