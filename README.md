@@ -8,7 +8,7 @@
 <p>=============
 
 <hr>
-<p> For User
+<p> Install
 <p> <b>ขั้นตอนการติดตั้ง</b>
 <p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci
 <p>(2) แตกไฟล์ dhdc3 ที่ wwwroot 
