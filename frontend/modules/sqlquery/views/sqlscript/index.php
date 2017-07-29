@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     //echo $role;
     ?>
-    <?php if (MyHelper::user_can('User')): ?>
+    <?php if (MyHelper::user_can('Admin')): ?>
 
         <p>
             <?= Html::a('<i class="glyphicon glyphicon-pencil"></i> เพิ่ม SQL', ['create'], ['class' => 'btn btn-success']) ?>

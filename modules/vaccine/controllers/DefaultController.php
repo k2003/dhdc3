@@ -3,16 +3,27 @@
 namespace modules\vaccine\controllers;
 
 use yii\web\Controller;
+use yii\filters\AccessControl;
 
 /**
  * Default controller for the `vaccine` module
  */
 class DefaultController extends Controller
 {
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
+    public function behaviors() {
+        return [
+            'acess'=>[
+                'class'=>  AccessControl::className(),
+                'rules' => [
+                    [                        
+                        'allow' => true,
+                        'roles' => ['User'],
+                    ],
+                ],
+                
+            ]
+        ];
+    }
     public function actionIndex()
     {
         return $this->render('index');
