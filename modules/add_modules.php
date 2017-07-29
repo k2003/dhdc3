@@ -17,6 +17,9 @@ return [
     'vaccine' => [
         'class' => 'modules\vaccine\Vaccine',
     ],
+    'special' => [
+        'class' => 'modules\special\Special',
+    ],
 ];
 
 
