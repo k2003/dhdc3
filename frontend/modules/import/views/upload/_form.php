@@ -4,7 +4,7 @@ use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
 use kartik\widgets\ActiveForm; // or yii\widgets\ActiveForm
 use kartik\widgets\FileInput;
-use frontend\modules\import\models\SysOnoffUpload;
+
 
 //use kartik\widgets\ActiveForm; // or yii\widgets\ActiveForm
 //use kartik
@@ -15,11 +15,7 @@ use frontend\modules\import\models\SysOnoffUpload;
 ?>
 
 <div class="upload-fortythree-form">
-    <?php
-    $onof = SysOnoffUpload::findOne(1);
-    if ($onof->status === 'on'):
-        ?>
-        <?php
+      <?php
         $form = ActiveForm::begin([
                     'options' => ['enctype' => 'multipart/form-data'] // important
         ]);
@@ -37,8 +33,6 @@ use frontend\modules\import\models\SysOnoffUpload;
         <?= $form->field($model, 'upload_time')->hiddenInput(['value' => date('H:i:s')])->label(false) ?>
         <button class="btn btn-blue"><i class="glyphicon glyphicon-upload"></i> Upload</button>
         <?php ActiveForm::end(); ?>
-    <?php else: ?>
-        <div class="alert alert-danger">ผู้ดูแลระบบ ปิดการนำเข้า </div>
-    <?php endif; ?>
+   
 
 </div>

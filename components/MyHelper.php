@@ -6,18 +6,20 @@ use yii\base\Component;
 use common\models\config\SysConfigMain;
 use backend\modules\pluginsetup\models\SysDhdcPlugin;
 use dektrium\user\models\User;
+use common\models\config\SysOnoffUpload;
 
 class MyHelper extends Component {
 
-    public static  function setFlash($key='danger',$msg){
+    public static function setFlash($key = 'danger', $msg) {
         return \Yii::$app->session->setFlash($key, $msg);
     }
 
     public static function user_can($permissionName = 'User') {
         return \Yii::$app->user->can($permissionName);
     }
-     public static function user_can_own($data_hoscode=NULL) {
-        return \Yii::$app->user->can('OnlyOwnHos', ['data_hoscode'=> $data_hoscode]);
+
+    public static function user_can_own($data_hoscode = NULL) {
+        return \Yii::$app->user->can('OnlyOwnHos', ['data_hoscode' => $data_hoscode]);
     }
 
     public static function exec_sql($sql = NULL) {
@@ -40,25 +42,29 @@ class MyHelper extends Component {
         ini_set('memory_limit', $memory);
     }
 
-    protected function getModName(){
+    protected function getModName() {
         return \Yii::$app->controller->module->id;
     }
-    
+
     public static function modIsOn() {
-        $mod_name= self::getModName();
+        $mod_name = self::getModName();
         $m = SysDhdcPlugin::find()->where(['mod_name' => $mod_name, 'status' => 'on'])->one();
         if ($m) {
             return TRUE;
         }
         return FALSE;
     }
-    public static function getUserHoscode($user_id){
+
+    public static function getUserHoscode($user_id) {
         $user = User::findOne($user_id);
-        if($user){
+        if ($user) {
             return $user->profile->location;
         }
-        
     }
-   
+
+    public static function uploadOn() {
+        $m = SysOnoffUpload::find()->one();
+        return $m->status == 'on';
+    }
 
 }

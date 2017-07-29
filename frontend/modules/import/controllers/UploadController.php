@@ -14,7 +14,6 @@ use yii\helpers\FileHelper;
 use components\MyHelper;
 
 
-
 class UploadController extends Controller {
 
     public $enableCsrfValidation = false;
@@ -29,7 +28,7 @@ class UploadController extends Controller {
                     
                     [
                         'actions' => ['create'],
-                        'allow' => true,
+                        'allow' => MyHelper::uploadOn(),
                         'roles' => ['User'],
                     ],
                     [

@@ -27,3 +27,7 @@ if(components\MyHelper::user_can_own('07554')){
 }else{
     echo "NO";
 }
+
+use common\models\config\SysOnoffUpload;
+$m = SysOnoffUpload::findOne(1);
+echo $m->status;
