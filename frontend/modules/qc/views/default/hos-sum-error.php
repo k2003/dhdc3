@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = 'คุณภาพข้อมูลราย�
         'hover' => true,
         //'pjax' => true,
         'containerOptions' => ['style' => 'overflow: auto'],
-        'responsive' => FALSE,
+        'responsiveWrap' => FALSE,
         //'floatHeader' => true,
         'panel' => [
             'before' => '',

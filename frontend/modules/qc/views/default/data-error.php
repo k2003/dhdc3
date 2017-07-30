@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = 'ERROR แฟ้ม ' . $filename;
         ],
         'pjax' => true,
         'containerOptions' => ['style' => 'overflow: auto'],
-        'responsive' => FALSE,
+        'responsiveWrap' => FALSE,
         //'floatHeader' => true,
         'panel' => [
             'before' => '',
