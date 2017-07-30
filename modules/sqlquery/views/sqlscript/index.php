@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
 //echo GridView::widget([
     echo \kartik\grid\GridView::widget([
-        'responsive' => true,
+        'responsiveWrap' => FALSE,
         'hover' => true,
         'floatHeader' => true,
         //'panel' => ['before' => ''],

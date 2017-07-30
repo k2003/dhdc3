@@ -46,7 +46,7 @@ if (isset($dataProvider))
     echo \kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => ''],
-        'responsive' => TRUE,
+        'responsiveWrap' => FALSE,
         'hover' => true,
         //'floatHeader' => true,
         'panel' => [
