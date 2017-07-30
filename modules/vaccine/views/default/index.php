@@ -63,19 +63,23 @@ ORDER BY t.DATE_SERV ASC
                 ?>
                 
                 <?php
+                $info ='';
+                if(count($raw)>0){
                 $info = $raw[0]['HOSPCODE'].'-'.$raw[0]['PID'].'  ชื่อ '.$raw[0]['NAME']
                         .',เกิด '.$raw[0]['BIRTH']
                         .' เพศ '.$raw[0]['SEX']
                         .' อายุปัจจุบัน '.$raw[0]['AGE_MON'].' ด.' ;
+                }
                 echo GridView::widget([
                     'panel' => ['before' => $info],
                     'responsiveWrap' => false,
                     'dataProvider' => $dataProvider,
                     'columns' => [
                         'DATE_SERV:text:วดป.ฉีด',
+                        'VAC_MON:text:อายุ ณ วันฉีด(ด)',
                         'VACC:text:วัคซีน',
                         'VACCINEPLACE:text:ฉีดที่',
-                        'VAC_MON:text:อายุ ณ วันฉีด(ด)'
+                        
                     ]
                 ]);
                 ?>
