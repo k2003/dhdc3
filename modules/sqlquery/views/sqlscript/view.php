@@ -11,10 +11,9 @@ $this->params['breadcrumbs'][] = ['label' => 'คลัง Script', 'url' => ['i
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sqlscript-view">
+ 
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
+  
 
         <?php $route_run = \yii\helpers\Url::to(['runquery/index']) ?>
     <form method="post" action="<?= $route_run ?>" class="form form-inline">
