@@ -36,7 +36,18 @@ $web = \Yii::getAlias('@web');
 
         <style>
             body { margin:0; padding:0; }
-            #map { position:absolute; top:0; bottom:0; width:100%; }
+            .title{
+                font-size: 1.5em;
+                position: absolute;
+                top:0;
+                left: 0;
+                right: 0;
+                height: 35px;
+                background-color: rgba(77, 106, 106, 1);
+                color: white;  
+                text-align: center;
+            }
+            #map { position:absolute; top:0; bottom:0; width:100%; margin-top: 35px;}
             .show-latlng{
                 position:absolute;
                 bottom:0;
@@ -58,9 +69,9 @@ $web = \Yii::getAlias('@web');
         <link rel="stylesheet" type="text/css" href="<?= $web ?>/lib/map/leaflet-search/dist/leaflet-search.min.css"/>
         <script src="<?= $web ?>/lib/map/leaflet-search/dist/leaflet-search.min.js"></script>
 
-        <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>   
-        <div id='map'>         
-        </div>
+        <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script> 
+        <div class="title">ระบบภูมิสารสนเทศ DHDC GIS</div>
+        <div id='map'></div>
         <div class="show-latlng">
             <input type="text" id="txt-latlng" style="width: 290px"/>
         </div>
