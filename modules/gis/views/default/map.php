@@ -111,6 +111,43 @@ $web = \Yii::getAlias('@web');
             crosshair = new L.marker(map.getCenter(), {icon: crosshairIcon, clickable: false});
             crosshair.addTo(map);
 
+            // control
+            var featureGroupDraw = L.featureGroup().addTo(map);
+            var drawControl = new L.Control.Draw({
+                draw: {
+                    circle: false,
+                    rectangle: false,
+                    marker: false,
+                    polyline: false
+                },
+                edit: {
+                    featureGroup: featureGroupDraw,
+                    remove: false,
+                    edit: false
+                }
+            }).addTo(map);
+
+            L.control.custom({
+                position: 'topleft',
+                content: '<button type="button" class="btn btn-default btn-circle" title="รัศมี...">' +
+                        '    <i class="glyphicon glyphicon-record"></i>' +
+                        '</button>' +
+                        '<button type="button" class="btn btn-default btn-reload" title="reload...">' +
+                        '    <i class="glyphicon glyphicon-refresh"></i>' +
+                        '</button>'
+                ,
+                classes: 'btn-group-vertical btn-group-sm',
+                style:
+                        {
+                            margin: '10px',
+                            padding: '0px 0 0 0',
+                            cursor: 'pointer'
+                        },
+            }).addTo(map);
+
+
+
+            //end control
 
 
 
@@ -129,6 +166,8 @@ $web = \Yii::getAlias('@web');
             });
 
             map.fitBounds(tambon.getBounds());
+
+
 <?php
 $json_home_route = Url::to(['point-home']);
 $json_vill_route = Url::to(['point-vill']);
@@ -173,48 +212,41 @@ $json_hosp_route = Url::to(['point-hosp']);
                     })
                 });//  end click circle
 
-                //darwing
-                var featureGroupDraw = L.featureGroup().addTo(map);
-                var drawControl = new L.Control.Draw({
-                    draw: {
-                        circle: false,
-                        rectangle: false,
-                        marker: false,
-                        polyline: false
-                    },
-                    edit: {
-                        featureGroup: featureGroupDraw,
-                        //remove: true
-                    }
-                }).addTo(map);
+                //drawing 
+
                 map.on(L.Draw.Event.CREATED, function (e) {
                     var type = e.layerType;
+                    console.log(type);
                     var layer = e.layer;
-                   featureGroupDraw.addLayer(layer);
+                    featureGroupDraw.addLayer(layer);
                     //console.log(layer.toGeoJSON());
-                    var polygonCollection = turf.featureCollection([layer.toGeoJSON()]);
-                    var resGeojson = turf.within(homeCollection, polygonCollection);
-                    var countHome = resGeojson.features.length;
-                    var list = "";
-                    //labelHomeLayer.remove();
-                    resGeojson.features.forEach(function (data) {
-                        list += "บ้านเลขที่ " + data.properties.title + "<br>";
+                    if (type == 'polygon') {
+                        var polygonCollection = turf.featureCollection([layer.toGeoJSON()]);
+                        var resGeojson = turf.within(homeCollection, polygonCollection);
+                        var countHome = resGeojson.features.length;
+                        var list = "";
+                        //labelHomeLayer.remove();
+                        resGeojson.features.forEach(function (data) {
+                            list += "บ้านเลขที่ " + data.properties.title + "<br>";
 
-                        var latLng = [data.geometry.coordinates[1], data.geometry.coordinates[0]];
-                        var lbHtml = '<span style="background-color:#FFF8DC;">';
-                        lbHtml += data.properties.title;
-                        lbHtml += '<span>';
-                        L.marker(latLng, {icon: L.divIcon({className: 'point-label', html: lbHtml})}).addTo(labelHomeLayer);
+                            var latLng = [data.geometry.coordinates[1], data.geometry.coordinates[0]];
+                            var lbHtml = '<span style="background-color:#FFF8DC;">';
+                            lbHtml += data.properties.title;
+                            lbHtml += '<span>';
+                            L.marker(latLng, {icon: L.divIcon({className: 'point-label', html: lbHtml})}).addTo(labelHomeLayer);
 
-                    });
-                    //alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
-                    layer.on('click',function(){
-                         $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด " + countHome + " หลัง</h4><br>" + list);
+                        });
+                        //alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
+                        layer.on('click', function () {
+                            $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด " + countHome + " หลัง</h4><br>" + list);
 
-                    });
-                   
+                        });
+                    }
+
 
                 }); //end drawing
+
+
             })
 
             var villages = L.mapbox.featureLayer().loadURL('<?= $json_vill_route ?>');
@@ -333,25 +365,6 @@ $json_hosp_route = Url::to(['point-hosp']);
                 });
             });
             L.control.ruler({position: 'topleft'}).addTo(map);
-
-            L.control.custom({
-                position: 'topleft',
-                content: '<button type="button" class="btn btn-default btn-circle" title="รัศมี...">' +
-                        '    <i class="glyphicon glyphicon-record"></i>' +
-                        '</button>' +
-                        '<button type="button" class="btn btn-default btn-reload" title="reload...">' +
-                        '    <i class="glyphicon glyphicon-refresh"></i>' +
-                        '</button>'
-                ,
-                classes: 'btn-group-vertical btn-group-sm',
-                style:
-                        {
-                            margin: '10px',
-                            padding: '0px 0 0 0',
-                            cursor: 'pointer'
-                        },
-            }).addTo(map);
-
 
 
             $('.btn-reload').click(function () {
