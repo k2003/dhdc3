@@ -123,6 +123,8 @@ $web = \Yii::getAlias('@web');
             crosshair.addTo(map);
 
             // control
+            L.control.ruler({position: 'topleft'}).addTo(map); 
+            
             var featureGroupDraw = L.featureGroup().addTo(map);
             var drawControl = new L.Control.Draw({
                 draw: {
@@ -375,7 +377,7 @@ $json_hosp_route = Url::to(['point-hosp']);
                     layer.openPopup();
                 });
             });
-            L.control.ruler({position: 'topleft'}).addTo(map);
+            
 
 
             $('.btn-reload').click(function () {
