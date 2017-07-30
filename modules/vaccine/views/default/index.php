@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
             <?php
             $cid = trim(\Yii::$app->request->post('cid'));
             $bdate = trim(\Yii::$app->request->post('bdate'));
+            $bdate_begin = trim(\Yii::$app->request->post('bdate_begin'));
+            $bdate_end = trim(\Yii::$app->request->post('bdate_end'));
             ?>
             <div class="row">
                 <div class="col-md-6">
@@ -37,8 +39,19 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
             <?php if ($cid): ?>    
                 ผลการค้นหาด้วย 13 หลัก
                 <?php
-                $sql = "SELECT p.`NAME`,p.LNAME,p.BIRTH,p.HOSPCODE,p.CID,p.TYPEAREA,p.DISCHARGE
-,t.* from t_person_epi t LEFT JOIN t_person_cid p on p.CID = t.cid  where p.CID ='$cid'";
+                $sql = "SELECT p.HOSPCODE,p.PID,p.CID,concat(p.`NAME`,' ',p.LNAME) NAME,p.SEX,p.BIRTH,TIMESTAMPDIFF(MONTH,p.BIRTH,CURDATE()) AGE_MON
+
+,t.DATE_SERV,concat(t.VACCINETYPE,'-',v.engvaccine) VACC 
+,t.VACCINEPLACE
+,TIMESTAMPDIFF(MONTH,p.BIRTH,t.DATE_SERV) VAC_MON
+
+FROM epi t
+LEFT JOIN t_person_cid p on t.HOSPCODE = p.HOSPCODE AND t.PID = p.PID
+LEFT JOIN cvaccinetype v ON v.vaccinecode = t.VACCINETYPE
+HAVING VACC is not NULL
+AND CID = '$cid'
+ORDER BY t.DATE_SERV ASC
+";
                 try {
                     $raw = \Yii::$app->db->createCommand($sql)->queryAll();
                 } catch (\yii\db\Exception $e) {
@@ -47,16 +60,52 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
                 $dataProvider = new ArrayDataProvider([
                     'allModels' => $raw
                 ]);
+                ?>
+                
+                <?php
+                $info = $raw[0]['HOSPCODE'].'-'.$raw[0]['PID'].'  ชื่อ '.$raw[0]['NAME']
+                        .',เกิด '.$raw[0]['BIRTH']
+                        .' เพศ '.$raw[0]['SEX']
+                        .' อายุปัจจุบัน '.$raw[0]['AGE_MON'].' ด.' ;
                 echo GridView::widget([
+                    'panel' => ['before' => $info],
                     'responsiveWrap' => false,
-                    'dataProvider' => $dataProvider
+                    'dataProvider' => $dataProvider,
+                    'columns' => [
+                        'DATE_SERV:text:วดป.ฉีด',
+                        'VACC:text:วัคซีน',
+                        'VACCINEPLACE:text:ฉีดที่',
+                        'VAC_MON:text:อายุ ณ วันฉีด(ด)'
+                    ]
                 ]);
                 ?>
 
             <?php endif; ?>
 
             <?php if ($bdate): ?>
-                ผลการค้นหาด้วย วดป.เกิด:
+               <?php
+                $sql = "SELECT concat(p.`NAME`,' ',p.LNAME) name,t.* from t_person_epi t 
+LEFT JOIN t_person_cid p on t.cid = p.CID
+WHERE t.birth BETWEEN '$bdate_begin' AND '$bdate_end' order by t.birth ASC";
+                try {
+                    $raw = \Yii::$app->db->createCommand($sql)->queryAll();
+                } catch (\yii\db\Exception $e) {
+                    throw new yii\web\ForbiddenHttpException('sql error');
+                }
+                $dataProvider = new ArrayDataProvider([
+                    'allModels' => $raw
+                ]);
+                ?>
+                
+                <?php
+                $info = 'รายการที่พบ' ;
+                echo GridView::widget([
+                    'panel' => ['before' => $info],
+                    'responsiveWrap' => false,
+                    'dataProvider' => $dataProvider,
+                   
+                ]);
+                ?>
             <?php endif; ?>
         </div>
     </div>
