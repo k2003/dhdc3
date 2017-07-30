@@ -28,11 +28,15 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติ Spe
             <?php if ($cid): ?>    
                 ผลการค้นหาด้วย 13 หลัก
                 <?php
-                $sql = "SELECT p.CID,t.* from specialpp t
-LEFT JOIN t_person_cid p on p.HOSPCODE = t.HOSPCODE AND p.PID = t.PID
-WHERE trim(t.HOSPCODE) <> '' AND trim(t.PID) <> ''
-AND p.CID = '$cid'
-ORDER BY t.DATE_SERV";
+                $sql = "SELECT p.CID,concat(p.`NAME`,' ',p.LNAME) NAME,p.SEX,p.BIRTH,t.HOSPCODE,t.PID
+,t.DATE_SERV,t.PPSPECIAL,s.itmname PP,t.PPSPLACE
+FROM specialpp t
+LEFT JOIN t_person_cid p on t.HOSPCODE = p.HOSPCODE AND t.PID = p.PID
+LEFT JOIN cppspecial s ON s.itmcode = t.PPSPECIAL
+
+WHERE p.CID = '$cid'
+
+ORDER BY t.DATE_SERV ASC";
                 try {
                     $raw = \Yii::$app->db->createCommand($sql)->queryAll();
                 } catch (\yii\db\Exception $e) {
@@ -42,6 +46,7 @@ ORDER BY t.DATE_SERV";
                     'allModels' => $raw
                 ]);
                 echo GridView::widget([
+                    'panel'=>['before'=>''],
                     'responsiveWrap' => false,
                     'dataProvider' => $dataProvider
                 ]);
