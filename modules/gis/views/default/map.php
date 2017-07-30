@@ -138,7 +138,10 @@ $json_hosp_route = Url::to(['point-hosp']);
             var labelHomeLayer = L.featureGroup().addTo(map);
             home.on('ready', function () {
                 home.addTo(clusterHome);
+                var homeGeojson = home.getGeoJSON();
+                var homeCollection = turf.featureCollection(homeGeojson);
 
+                //click circle
                 $('.btn-circle').click(function () {
                     var r = prompt("ระบุรัศมี (เมตร)", 100);
                     var circleRadius = L.circle(map.getCenter(), Number(r), {color: 'yellow', 'dashArray': 4, weight: 2}).addTo(map);
@@ -149,16 +152,6 @@ $json_hosp_route = Url::to(['point-hosp']);
                         var circleJson = turf.circle([latlng.lng, latlng.lat], Number(r) / 1000, 100, 'kilometers', {});
 
                         var circleCollection = turf.featureCollection([circleJson]);
-
-                        //var resGeojson = turf.within(,circleCollection);
-
-                        var homeGeojson = [];
-                        home.eachLayer(function (layer) {
-                            if (layer.feature.geometry.coordinates[1] != null & layer.feature.geometry.coordinates[0] != null) {
-                                homeGeojson.push(layer.feature);
-                            }
-                        });
-                        var homeCollection = turf.featureCollection(homeGeojson);
 
                         var resGeojson = turf.within(homeCollection, circleCollection);
                         var countHome = resGeojson.features.length;
@@ -178,7 +171,50 @@ $json_hosp_route = Url::to(['point-hosp']);
                         $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด " + countHome + " หลัง</h4><br>" + list);
 
                     })
-                });
+                });//  end click circle
+
+                //darwing
+                var featureGroupDraw = L.featureGroup().addTo(map);
+                var drawControl = new L.Control.Draw({
+                    draw: {
+                        circle: false,
+                        rectangle: false,
+                        marker: false,
+                        polyline: false
+                    },
+                    edit: {
+                        featureGroup: featureGroupDraw,
+                        //remove: true
+                    }
+                }).addTo(map);
+                map.on(L.Draw.Event.CREATED, function (e) {
+                    var type = e.layerType;
+                    var layer = e.layer;
+                   featureGroupDraw.addLayer(layer);
+                    //console.log(layer.toGeoJSON());
+                    var polygonCollection = turf.featureCollection([layer.toGeoJSON()]);
+                    var resGeojson = turf.within(homeCollection, polygonCollection);
+                    var countHome = resGeojson.features.length;
+                    var list = "";
+                    //labelHomeLayer.remove();
+                    resGeojson.features.forEach(function (data) {
+                        list += "บ้านเลขที่ " + data.properties.title + "<br>";
+
+                        var latLng = [data.geometry.coordinates[1], data.geometry.coordinates[0]];
+                        var lbHtml = '<span style="background-color:#FFF8DC;">';
+                        lbHtml += data.properties.title;
+                        lbHtml += '<span>';
+                        L.marker(latLng, {icon: L.divIcon({className: 'point-label', html: lbHtml})}).addTo(labelHomeLayer);
+
+                    });
+                    //alert("<b>พื้นที่นี้มี  <u>" + countHome + "</u> หลังคาเรือน</b>" + list)
+                    layer.on('click',function(){
+                         $('#modal').modal('show').find('#modalContent').html("<h4>ทั้งหมด " + countHome + " หลัง</h4><br>" + list);
+
+                    });
+                   
+
+                }); //end drawing
             })
 
             var villages = L.mapbox.featureLayer().loadURL('<?= $json_vill_route ?>');
@@ -338,6 +374,9 @@ $json_hosp_route = Url::to(['point-hosp']);
             $('#txt-latlng').click(function (e) {
                 $(this).select();
             });
+
+
+
 
             // search control
 
