@@ -70,7 +70,7 @@ $web = \Yii::getAlias('@web');
         <script src="<?= $web ?>/lib/map/leaflet-search/dist/leaflet-search.min.js"></script>
 
         <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script> 
-        <div class="title">ระบบภูมิสารสนเทศ DHDC GIS</div>
+        <div class="title">DHDC GIS ระบบภูมิสารสนเทศ</div>
         <div id='map'></div>
         <div class="show-latlng">
             <input type="text" id="txt-latlng" style="width: 290px"/>
