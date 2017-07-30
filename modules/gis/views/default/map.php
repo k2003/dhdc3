@@ -104,7 +104,7 @@ $web = \Yii::getAlias('@web');
 
             //crosshair
             var crosshairIcon = L.icon({
-                iconUrl: "<?=$web?>/images/crosshair.png",
+                iconUrl: "<?= $web ?>/images/crosshair.png",
                 iconSize: [25, 25], // size of the icon
                 //iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
             });
@@ -115,8 +115,8 @@ $web = \Yii::getAlias('@web');
 
 
             var villGroup = L.featureGroup();
-            var tambonGroup = L.featureGroup().addTo(map);
-            var hospitalGroup = L.featureGroup().addTo(map);
+            var tambonGroup = L.featureGroup();
+            var hospitalGroup = L.featureGroup();
 
             var tambon = L.mapbox.featureLayer()
                     .setGeoJSON(<?= $tambon_pol ?>);
@@ -124,7 +124,7 @@ $web = \Yii::getAlias('@web');
                 var json = layer.feature;
                 var feature = L.mapbox.featureLayer(json);
                 feature.bindTooltip(json.properties.title, {permanent: 'true'});
-                feature.setStyle({weight:1,fillOpacity:0,dashArray:4});
+                feature.setStyle({weight: 1, fillOpacity: 0, dashArray: 4});
                 feature.addTo(tambonGroup);
             });
 
@@ -233,7 +233,7 @@ $json_hosp_route = Url::to(['point-hosp']);
             radars = JSON.parse(radars);
             latlng_topright = JSON.parse(latlng_topright);
             latlng_bottomleft = JSON.parse(latlng_bottomleft);
-            var rain = L.layerGroup().addTo(map);
+            var rain = L.layerGroup();
             $.each(radars, function (key, value) {
                 var top_right = latlng_topright[key].split(",");
                 var bottom_left = latlng_bottomleft[key].split(",");
@@ -243,16 +243,33 @@ $json_hosp_route = Url::to(['point-hosp']);
                 L.imageOverlay(imageUrl, imageBounds).addTo(rain).setOpacity(0.95);
             });//จบฝน
 
+            //นำท่วม
 
+            var flood_update = L.tileLayer.wms('http://tile.gistda.or.th/geoserver/wms?', {
+                layers: "flood:flood_update",
+                transparent: true,
+                format: 'image/png',
+                tiles: true,
+            });
+            var flood_percent = L.tileLayer.wms('http://tile.gistda.or.th/geoserver/wms?', {
+                layers: "flood:flood_percent",
+                transparent: true,
+                format: 'image/png',
+                //opacity:1,
+                tiles: true,
+            });
+            //จบน้ำท่วม
 
             //จบ wms
 
             var overlays = {
-                'โรงพยาบาล': hospitalGroup,
-                'หลังคาเรือน': clusterHome,
+                'โรงพยาบาล': hospitalGroup.addTo(map),
+                'หลังคาเรือน': clusterHome.addTo(map),
                 'ขอบเขตตำบล': tambonGroup,
                 'หมู่บ้าน': villGroup,
                 'เรดาห์น้ำฝน': rain,
+                'พื้นที่น้ำท่วมรายตำบลรอบ 7 วัน': flood_percent,
+                'พื้นที่น้ำท่วมรอบ7วัน': flood_update,
             };
             L.control.layers(baseLayers, overlays).addTo(map);
             tambon.eachLayer(function (layer) {
