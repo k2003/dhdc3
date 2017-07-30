@@ -28,8 +28,8 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
                 <div class="col-md-6">
                     <?php $form = ActiveForm::begin(); ?>
                     เกิดระหว่าง:
-                    <?= Html::textInput('bdate_begin', '', ['placeholder' => 'วดป.เกิด']) ?>
-                    -<?= Html::textInput('bdate_end', '', ['placeholder' => 'วดป.เกิด']) ?>
+                    <?= Html::textInput('bdate_begin', '', ['placeholder' => 'yyyy-mm-dd']) ?>
+                    ถึง <?= Html::textInput('bdate_end', '', ['placeholder' => 'yyyy-mm-dd']) ?>
                     <?= Html::hiddenInput('bdate', 'yes') ?>
                     <?= Html::submitButton('ค้นหา'); ?>
                     <?php ActiveForm::end(); ?>
