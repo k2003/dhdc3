@@ -123,8 +123,8 @@ $web = \Yii::getAlias('@web');
             crosshair.addTo(map);
 
             // control
-            L.control.ruler({position: 'topleft'}).addTo(map); 
-            
+            L.control.ruler({position: 'topleft'}).addTo(map);
+
             var featureGroupDraw = L.featureGroup().addTo(map);
             var drawControl = new L.Control.Draw({
                 draw: {
@@ -301,13 +301,14 @@ $json_hosp_route = Url::to(['point-hosp']);
                 })
             });
 
-            //wms
+            //เริ่มwms
 
             //ฝน
             var base_url = 'http://rain.tvis.in.th/';
-            var radars = '["NongKham","KKN"]';
-            var latlng_topright = '["15.09352819610486,101.7458188486135","18.793550,105.026265"]';
-            var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459"]';
+            var radar = 'NongKham';
+            var radars = '["NongKham","KKN","PHS","CRI"]';
+            var latlng_topright = '["15.09352819610486,101.7458188486135","18.793550,105.026265","19.094393,102.475537","22.305437,102.143387"]';
+            var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459","14.411350,97.983591","17.596297,97.611690"]';
             var d = new Date();
             var time = d.getTime();
             //console.log(time);
@@ -315,14 +316,20 @@ $json_hosp_route = Url::to(['point-hosp']);
             latlng_topright = JSON.parse(latlng_topright);
             latlng_bottomleft = JSON.parse(latlng_bottomleft);
             var rain = L.layerGroup();
+            var urllast;
+            var boundlast;
             $.each(radars, function (key, value) {
                 var top_right = latlng_topright[key].split(",");
-                var bottom_left = latlng_bottomleft[key].split(",");
-                //console.log(base_url + "/output/" + value + ".png?" + time);
+                var bottom_left = latlng_bottomleft[key].split(",");                
+                
                 var imageUrl = base_url + "/output/" + value + ".png?" + time,
                         imageBounds = [[top_right[0], top_right[1]], [bottom_left[0], bottom_left[1]]];
                 L.imageOverlay(imageUrl, imageBounds).addTo(rain).setOpacity(0.95);
-            });//จบฝน
+
+            });
+            //จบฝน
+
+
 
             //นำท่วม
 
@@ -331,6 +338,7 @@ $json_hosp_route = Url::to(['point-hosp']);
                 transparent: true,
                 format: 'image/png',
                 tiles: true,
+                attribution:'<a href="http://flood.gistda.or.th" target="_blank"><b>GISTDA THAILAND</b></a>'
             });
             var flood_percent = L.tileLayer.wms('http://tile.gistda.or.th/geoserver/wms?', {
                 layers: "flood:flood_percent",
@@ -338,6 +346,7 @@ $json_hosp_route = Url::to(['point-hosp']);
                 format: 'image/png',
                 //opacity:1,
                 tiles: true,
+                attribution:'<a href="http://flood.gistda.or.th" target="_blank"><b>GISTDA THAILAND</b></a>'
             });
             //จบน้ำท่วม
 
@@ -377,7 +386,7 @@ $json_hosp_route = Url::to(['point-hosp']);
                     layer.openPopup();
                 });
             });
-            
+
 
 
             $('.btn-reload').click(function () {
