@@ -10,7 +10,7 @@
 
 [install database]
 - download http://203.157.118.123/dhdc3/databases.zip
-- นำเข้าตามหมายเลข (กรณี update โปรดระมัดระวัง เลือกไฟล์หมายเลข 1 ผิด)
+- นำเข้าตามหมายเลข 
 
 ﻿[httpd.conf]
 AllowOverride none  ->  AllowOverride All

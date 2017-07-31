@@ -1,16 +1,32 @@
 #DHDC 3.0 Plugable  by DHDC Team
 <hr>
-<p> <b>ขั้นตอนการติดตั้ง</b>
-<p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci
-<p>(2) แตกไฟล์ dhdc3 ที่ wwwroot 
-<p>(3) ตั้งค่าการเชื่อมต่อฐานข้อมูล dhdc3 ที่ common/config/connect_database.php
-<p>(4) Restore ฐานข้อมูลตั้งต้น เรียงลำดับตามหมายเลข
-<p>(5) กรณีมีฐาน 53 แฟ้ม อยู่ก่อนหน้า ให้ copy เฉพาะตาราง 53 แฟ้ม มาใส่ในฐาน dhdc3
-<p>(6) Login = admin ,123456
-<p>(6) จัดการระบบ - ตั้งค่าอำเภอ 
-<p>(7) จัดการระบบ - จัดการผู้ใช้ - create new user
-<p>(8) จัดการระบบ - ประมวลผล กดปุ่ม 1 และ 2
-<p>(9) Linux OS แก้ไข httpd.conf  ส่วน AllowOverRide  All
+
+<p><b>ขั้นตอนการเตรียมระบบ และการดาวน์โหลด</b>
+<p>#cd webroot
+<p>#wget http://203.157.118.123/dhdc3/dhdc.zip
+<p>#unzip dhdc3.zip
+<p>#cd dhdc3
+<p>#wget http://203.157.118.123/dhdc3/vendor.zip
+<p>#unzip vendor.zip
+<p>#cd ..
+<p>#chmod -R 0777 dhdc3
+<p>download  http://203.157.118.123/dhdc3/databases.zip
+<p>Linux OS แก้ไข httpd.conf  ส่วน AllowOverRide  All
+<hr>
+<p> <b>ขั้นตอนการติดตั้งระบบ</b>
+<p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci (กรณี upgrade ข้าม )
+<p>(2) ตั้งค่าการเชื่อมต่อฐานข้อมูลที่ไฟล์ dhdc3/common/config/<b>connect_database.php</b>
+<p>(3) Restore ไฟล์ฐานข้อมูลใน databases.zip เรียงลำดับตามหมายเลข (กรณี update โปรดระมัดระวังการเลือกไฟล์หมายเลข 1 ผิด)
+<p>(4) Login = admin ,123456
+<p>(5) จัดการระบบ - ตั้งค่าอำเภอ 
+<p>(6) จัดการระบบ - จัดการผู้ใช้ - create new user , สิทธิใช้งาน - มอบหมายสิทธิ
+<p>(7) จัดการระบบ - ประมวลผล กดปุ่ม 1 และ 2
+<p>(8) จัดการระบบ - Plugins
+
+<hr>
+<p><b>การติดตั้ง Plugins</b>
+<p>โปรดอ่าน dhdc3/moules/การติดตั้ง.txt
+
 
 <hr>
 <p>Programmer Section
