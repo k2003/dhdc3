@@ -3,14 +3,14 @@
 
 <p><b>ขั้นตอนการเตรียมระบบ และการดาวน์โหลด</b>
 <p>(1) #cd webroot
-<p>(2) #wget http://203.157.118.123/dhdc3/dhdc3.php
+<p>(2) #wget http://203.157.118.123/dhdc3/dhdc3.zip
 <p>(3) #unzip dhdc3.zip
 <p>(4) #cd dhdc3
-<p>(5) #wget http://203.157.118.123/dhdc3/vendor.php
+<p>(5) #wget http://203.157.118.123/dhdc3/vendor.zip
 <p>(6) #unzip vendor.zip
 <p>(7) #cd ..
 <p>(8) #chmod -R 0777 dhdc3
-<p>(9) download  http://203.157.118.123/dhdc3/databases.php
+<p>(9) download  http://203.157.118.123/dhdc3/databases.zip
 <p>(10) Linux OS แก้ไข httpd.conf  ส่วน AllowOverRide  All
 <hr>
 <p> <b>ขั้นตอนการติดตั้งระบบ</b>
