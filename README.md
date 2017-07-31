@@ -3,7 +3,7 @@
 
 <p><b>ขั้นตอนการเตรียมระบบ และการดาวน์โหลด</b>
 <p>(1) #cd webroot
-<p>(2) #wget http://203.157.118.123/dhdc3/dhdc.zip
+<p>(2) #wget http://203.157.118.123/dhdc3/dhdc3.zip
 <p>(3) #unzip dhdc3.zip
 <p>(4) #cd dhdc3
 <p>(5) #wget http://203.157.118.123/dhdc3/vendor.zip
