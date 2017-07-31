@@ -15,10 +15,19 @@ AllowOverride none  ->  AllowOverride All
 #wget http://203.157.118.123/dhdc3/databases.zip
 restore order by number
 
-
-
 [test]
 http://host/dhdc3/requirements.php
+
+[admin]
+-login 
+admin ,123456
+-จัดการผู้ใช้  
+create new user
+-ประมวลผล
+ปุ่ม 1 - 2
+
+
+
 
 
 
