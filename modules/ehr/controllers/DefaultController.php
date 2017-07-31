@@ -22,7 +22,7 @@ class DefaultController extends Controller {
                     [
                         'actions' => ['index'],
                         'allow' => MyHelper::modIsOn(),
-                        'roles' => ['@'],
+                        'roles' => ['User'],
                     ],
                     
                 ],
