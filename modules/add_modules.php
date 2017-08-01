@@ -23,6 +23,9 @@ return [
     'sqlquery' => [
         'class' => 'modules\sqlquery\SqlQuery',
     ],
+    'adhoc' => [
+        'class' => 'modules\adhoc\Adhoc',
+    ],
 ];
 
 
