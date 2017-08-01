@@ -333,8 +333,8 @@ $json_hosp_route = Url::to(['point-hosp']);
 
             //นำท่วม
 
-            var flood_update = L.tileLayer.wms('http://tile.gistda.or.th/geoserver/wms?', {
-                layers: "flood:flood_update",
+            var flood_update = L.tileLayer.wms('http://tile.gistda.or.th/geoserver/flood/wms?', {
+                layers: "floodarea_tambon",
                 transparent: true,
                 format: 'image/png',
                 tiles: true,
