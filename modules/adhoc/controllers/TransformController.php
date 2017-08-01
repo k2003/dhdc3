@@ -14,13 +14,12 @@ use components\MyHelper;
 /**
  * TransformController implements the CRUD actions for Transform model.
  */
-class TransformController extends Controller
-{
+class TransformController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -32,8 +31,8 @@ class TransformController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
 
-                     [
-                       
+                    [
+
                         'allow' => MyHelper::modIsOn(),
                         'roles' => ['Admin'],
                     ],
@@ -42,18 +41,37 @@ class TransformController extends Controller
         ];
     }
 
+    protected function init_transform() {
+        
+        $model = Transform::find()->all();
+        MyHelper::exec_sql("DROP PROCEDURE IF EXISTS dhdc_adhoc_transform;");
+        $command = "CREATE PROCEDURE dhdc_adhoc_transform()\r\n ";
+        $command.= "BEGIN\r\n";
+        foreach ($model as $t) {
+            if(substr($t->sql, -1)==';'){
+                $command.= $t->sql."\r\n";
+            }else{
+                $command.= $t->sql.";\r\n";
+            }
+        }
+        
+
+        
+        $command.= "\r\nEND";
+        MyHelper::exec_sql($command);
+    }
+
     /**
      * Lists all Transform models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new TransformSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -62,10 +80,9 @@ class TransformController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -74,15 +91,15 @@ class TransformController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Transform();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->init_transform();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -93,15 +110,15 @@ class TransformController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->init_transform();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -112,8 +129,7 @@ class TransformController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -126,12 +142,12 @@ class TransformController extends Controller
      * @return Transform the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Transform::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use components\MyHelper;
 use modules\adhoc\models\DhdcAdhoc;
@@ -11,26 +12,30 @@ $this->params['breadcrumbs'][] = ['label' => 'รายการ', 'url' => ['in
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?php  
+<?php
 $model = DhdcAdhoc::findOne($id);
 $title = $model->title;
-$sql= trim($model->sql_report);
-try{
+$sql = trim($model->sql_report);
+if (substr($sql, -1) == ';') {
+    $sql = $sql;
+} else {
+    $sql = $sql . ";";
+}
+try {
     $raw = \Yii::$app->db->createCommand($sql)->queryAll();
     $dataProvider = new ArrayDataProvider([
-        'allModels'=>$raw
+        'allModels' => $raw
     ]);
-    
-}catch(Exception $e){
-    throw new \yii\web\ForbiddenHttpException('sql error'); 
+} catch (Exception $e) {
+    throw new \yii\web\ForbiddenHttpException('sql error');
 }
 ?>
 <div>
     <?php
     echo GridView::widget([
-        'responsiveWrap'=>false,
-        'dataProvider'=>$dataProvider,
-        'panel'=>['before'=>$title]
+        'responsiveWrap' => false,
+        'dataProvider' => $dataProvider,
+        'panel' => ['before' => $title]
     ]);
     ?>
 </div>
