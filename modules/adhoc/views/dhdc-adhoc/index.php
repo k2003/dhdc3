@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use components\MyHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel modules\adhoc\models\DhdcAdhocSearch */
@@ -16,8 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('เพิ่ม Transform', ['transform/index'], ['class' => 'btn btn-orange']) ?>
-        <?= Html::a('เพิ่มรายงาน', ['create'], ['class' => 'btn btn-blue']) ?>
+        <?php if (MyHelper::user_can('Admin')): ?>
+            <?= Html::a('เพิ่ม Transform', ['transform/index'], ['class' => 'btn btn-orange']) ?>
+            <?= Html::a('เพิ่มรายงาน', ['create'], ['class' => 'btn btn-blue']) ?>
+        <?php endif; ?>
     </p>
     <?=
     GridView::widget([
