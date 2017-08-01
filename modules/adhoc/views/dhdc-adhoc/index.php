@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-         <?= Html::a('เพิ่ม Transform', ['transform/index'], ['class' => 'btn btn-orange']) ?>
+        <?= Html::a('เพิ่ม Transform', ['transform/index'], ['class' => 'btn btn-orange']) ?>
         <?= Html::a('เพิ่มรายงาน', ['create'], ['class' => 'btn btn-blue']) ?>
     </p>
     <?=
@@ -24,17 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => false,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => [ 'style' => 'table-layout: fixed; width: 100%'],
+        'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-          
+            //['class' => 'yii\grid\SerialColumn'],
+
             [
                 'attribute' => 'title',
-                 
+                'contentOptions' => ['style' => 'min-width: 660px;max-width: 660px;'],
             ],
             'type',
-            
             'updated_at:datetime:อัพเดท',
-            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}'
