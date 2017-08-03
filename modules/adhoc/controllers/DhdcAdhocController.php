@@ -143,7 +143,7 @@ class DhdcAdhocController extends Controller
     
     public function actionProcess($id){
         $this->layout = 'hdc';
-        return $this->render('Process',[
+        return $this->render('process',[
             'id'=>$id
         ]);
     }
