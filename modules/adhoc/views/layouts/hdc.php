@@ -31,8 +31,7 @@ AppAsset::register($this);
 
         
             <div class="container">
-                <p class="pull-right">
-                    หมายเหตุ: ชุดคำสั่งประมวลผลข้อมูลในหน้าจอนี้ นำมาจากโปรแกรม HDC ของกระทรวงสาธารณสุข
+                <p class="pull-right">                    
                 </p>
             </div>
        

@@ -71,7 +71,7 @@ $title = $model->title;
     $sql_indiv = trim($model->sql_indiv);
     if (!MyHelper::user_can('Pm')) {
         $user_hos = MyHelper::getUserHoscode(\Yii::$app->user->id);
-        $sql_indiv .= "  having HOSPCODE ='$user_hos'";
+        //$sql_indiv .= "  having HOSPCODE ='$user_hos'";
     }else{
         $sql_indiv .= "  having HOSPCODE ='$select_hos'";
     }
