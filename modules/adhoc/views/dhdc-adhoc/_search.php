@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'sql_report') ?>
+    <?= $form->field($model, 'sql_sum') ?>
 
     <?= $form->field($model, 'date_begin') ?>
 

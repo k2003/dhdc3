@@ -13,9 +13,10 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'sql_report')->textarea(['rows' => 6]) ?>
-
+    <?= $form->field($model, 'sql_indiv')->textarea(['rows' => 8]) ?>
+   <?= $form->field($model, 'desc_indiv')->textInput(['maxlength' => true]) ?>    
+    <?= $form->field($model, 'sql_sum')->textarea(['rows' => 12]) ?>
+     <?= $form->field($model, 'desc_sum')->textInput(['maxlength' => true]) ?>
     
      <?= $form->field($model, 'type')->textInput() ?>
 

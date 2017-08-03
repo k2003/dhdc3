@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ])
             ?>
     <?php endif; ?>
-        <?= Html::a('ประมวลผล', ['report', 'id' => $model->id], ['class' => 'btn btn-orange']) ?>
+        <?= Html::a('ประมวลผล', ['process', 'id' => $model->id], ['class' => 'btn btn-orange','target'=>'_blank']) ?>
     </p>
 
     <?=
@@ -38,7 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'sql_report:ntext',            
+            'sql_indiv:ntext',    
+            'sql_sum:ntext',            
             'updated_at',
         ],
     ])

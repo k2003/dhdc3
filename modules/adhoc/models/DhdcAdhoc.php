@@ -11,7 +11,10 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property string $title
- * @property string $sql_report
+ * @property string $sql_sum
+ * @property string $desc_sum
+ * @property string $sql_indiv
+ * @property string $desc_indiv
  * @property string $date_begin
  * @property string $date_end
  * @property string $type
@@ -50,9 +53,9 @@ class DhdcAdhoc extends \yii\db\ActiveRecord
     {
         return [
             [['title'],'required'],
-            [['sql_report'], 'string'],
+            [['sql_sum','sql_indiv'], 'string'],
             [['date_begin', 'date_end', 'created_at', 'updated_at'], 'safe'],
-            [['type','note1','note2', 'created_by', 'updated_by'], 'string', 'max' => 255],
+            [['desc_sum','desc_indiv','type','note1','note2', 'created_by', 'updated_by'], 'string', 'max' => 255],
         ];
     }
 
@@ -64,7 +67,10 @@ class DhdcAdhoc extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'ชื่อรายงาน',
-            'sql_report' => 'คำสั่ง SQL',
+            'sql_sum' => 'คำสั่ง SQL ผลรวม',
+            'desc_sum'=>'คำอธิบายผลรวม',
+            'sql_indiv' => 'คำสั่ง SQL รายคน',
+            'desc_indiv'=>'คำอธิบายรายคน',
             'date_begin' => 'วันที่เริ่ม',
             'date_end' => 'วันที่สิ้นสุด',
             'type'=>'ประเภท',

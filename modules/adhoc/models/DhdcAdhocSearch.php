@@ -18,7 +18,7 @@ class DhdcAdhocSearch extends DhdcAdhoc {
     public function rules() {
         return [
             [['id'], 'integer'],
-            [['title', 'sql_report', 'date_begin', 'date_end', 'type', 'note1', 'note2', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['title', 'sql_sum','sql_indiv', 'date_begin', 'date_end', 'type', 'note1', 'note2', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
 
@@ -65,7 +65,8 @@ class DhdcAdhocSearch extends DhdcAdhoc {
 
         $query->andFilterWhere(['like', 'title', $this->title])
                 ->andFilterWhere(['like', 'type', $this->type])
-                ->andFilterWhere(['like', 'sql_report', $this->sql_report])
+                ->andFilterWhere(['like', 'sql_sum', $this->sql_sum])
+                ->andFilterWhere(['like', 'sql_indiv', $this->sql_indiv])
                 ->andFilterWhere(['like', 'created_by', $this->created_by])
                 ->andFilterWhere(['like', 'updated_by', $this->updated_by]);
 

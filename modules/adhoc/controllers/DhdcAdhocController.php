@@ -34,7 +34,7 @@ class DhdcAdhocController extends Controller
                 'rules' => [
 
                     [
-                        'actions' => ['index','view','report'],
+                        'actions' => ['index','view','process'],
                         'allow' => MyHelper::modIsOn(),
                         'roles' => ['User'],
                     ],
@@ -141,8 +141,9 @@ class DhdcAdhocController extends Controller
         }
     }
     
-    public function actionReport($id){
-        return $this->render('report',[
+    public function actionProcess($id){
+        $this->layout = 'hdc';
+        return $this->render('Process',[
             'id'=>$id
         ]);
     }
