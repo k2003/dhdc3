@@ -14,7 +14,7 @@
 <p>(10) Linux OS แก้ไข httpd.conf  ส่วน AllowOverRide  All
 <hr>
 <p> <b>ขั้นตอนการติดตั้งระบบ</b>
-<p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci (กรณี upgrade ข้าม )
+<p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci (กรณี upgrade จาก dhdc2 ข้ามไปข้อ 2 )
 <p>(2) ตั้งค่าการเชื่อมต่อฐานข้อมูลที่ไฟล์ dhdc3/common/config/<b>connect_database.php</b>
 <p>(3) Restore ไฟล์ฐานข้อมูลใน databases.zip เรียงลำดับตามหมายเลข (กรณี update โปรดระมัดระวังการเลือกไฟล์หมายเลข 1 ผิด)
 <p>(4) Login = admin ,123456
