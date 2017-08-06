@@ -3,6 +3,15 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use dektrium\user\models\User;
+use components\MyHelper;
+
+$hos = MyHelper::getUserHoscode(\Yii::$app->user->id);
+
+if(MyHelper::user_can("Pm")){
+echo "xxx";
+
+
+}
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\test\models\TestSearch */

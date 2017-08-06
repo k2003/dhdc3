@@ -26,6 +26,9 @@ return [
     'adhoc' => [
         'class' => 'modules\adhoc\Adhoc',
     ],
+    'nodejs' => [
+        'class' => 'modules\nodejs\Nodejs',
+    ],
 ];
 
 

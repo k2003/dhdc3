@@ -185,6 +185,7 @@ $web = \Yii::getAlias('@web');
 $json_home_route = Url::to(['point-home']);
 $json_vill_route = Url::to(['point-vill']);
 $json_hosp_route = Url::to(['point-hosp']);
+$json_adl_route = Url::to(['point-adl']);
 ?>
             var home = L.mapbox.featureLayer().loadURL('<?= $json_home_route ?>');
             var labelHomeLayer = L.featureGroup().addTo(map);
@@ -300,18 +301,24 @@ $json_hosp_route = Url::to(['point-hosp']);
 
                 })
             });
+            
+            var adl = L.mapbox.featureLayer();
+            adl.loadURL('<?=$json_adl_route?>');
+            adl.on('ready',function(e){
+                var json = e.target.getGeoJSON();
+            });
 
             //เริ่มwms
 
             //ฝน
             var base_url = 'http://rain.tvis.in.th/';
             var radar = 'NongKham';
-            var radars = '["NongKham","KKN","PHS","CRI"]';
-            var latlng_topright = '["15.09352819610486,101.7458188486135","18.793550,105.026265","19.094393,102.475537","22.305437,102.143387"]';
-            var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459","14.411350,97.983591","17.596297,97.611690"]';
+        var radars = '["NongKham","KKN","PHS","CRI","UBN","OMK"]';
+        var latlng_topright = '["15.09352819610486,101.7458188486135","18.793550,105.026265","19.094393,102.475537","22.305437,102.143387","17.558854,107.095363","19.904425,100.770048"]';
+        var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459","14.411350,97.983591","17.596297,97.611690","12.918883,102.646771","15.630408,96.114592"]';
             var d = new Date();
             var time = d.getTime();
-            //console.log(time);
+            console.log(time);
             radars = JSON.parse(radars);
             latlng_topright = JSON.parse(latlng_topright);
             latlng_bottomleft = JSON.parse(latlng_bottomleft);
@@ -353,6 +360,7 @@ $json_hosp_route = Url::to(['point-hosp']);
             //จบ wms
 
             var overlays = {
+                'ติดบ้านติดเตียง':adl,
                 'โรงพยาบาล': hospitalGroup.addTo(map),
                 'หลังคาเรือน': clusterHome.addTo(map),
                 'ขอบเขตตำบล': tambonGroup,
