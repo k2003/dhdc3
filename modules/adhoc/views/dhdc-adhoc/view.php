@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ])
             ?>
     <?php endif; ?>
-        <?= Html::a('ประมวลผล', ['process', 'id' => $model->id], ['class' => 'btn btn-orange','target'=>'_blank']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-play"></i> ประมวลผล', ['process', 'id' => $model->id], ['class' => 'btn btn-green pull-right','target'=>'_blank']) ?>
     </p>
 
     <?=

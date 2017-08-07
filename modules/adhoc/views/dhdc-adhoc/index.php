@@ -40,9 +40,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime:อัพเดท',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}'
-            ],
-        ],
-    ]);
-    ?>
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<i class="glyphicon glyphicon-search"></i>', $url, [
+                                    'title' => Yii::t('yii', 'รายละเอียด'),
+                        ]);
+                    }
+                        ]
+                    ],
+                    [
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            return Html::a('<i class="glyphicon glyphicon-play"></i>', ['process', 'id' => $model->id], ['class' => 'btn btn-green', 'target' => '_blank']);
+                        }
+                            ],
+                        ],
+                    ]);
+                    ?>
 </div>
