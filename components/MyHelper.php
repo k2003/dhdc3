@@ -42,7 +42,7 @@ class MyHelper extends Component {
         ini_set('memory_limit', $memory);
     }
 
-    protected function getModName() {
+    protected static function getModName() {
         return \Yii::$app->controller->module->id;
     }
 
