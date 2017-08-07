@@ -1,11 +1,11 @@
 <?php
 
-namespace frontend\modules\test\controllers;
+namespace modules\sync\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `test` module
+ * Default controller for the `sync` module
  */
 class DefaultController extends Controller
 {
@@ -16,9 +16,5 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
-    }
-    
-    public function actionGeo(){
-        return $this->renderPartial('geo');
     }
 }

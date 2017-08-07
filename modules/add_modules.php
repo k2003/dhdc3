@@ -29,6 +29,9 @@ return [
     'nodejs' => [
         'class' => 'modules\nodejs\Nodejs',
     ],
+    'sync' => [
+        'class' => 'modules\sync\Sync',
+    ],
 ];
 
 
