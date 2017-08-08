@@ -67,4 +67,25 @@ class MyHelper extends Component {
         return $m->status == 'on';
     }
 
+    public static function createAndRunProc($proc = null, $sql = null) {
+        if (substr($sql, -1) <> ';') {
+            $sql = $sql . ";";
+        }
+        
+        try {
+            self::exec_sql("DROP PROCEDURE IF EXISTS $proc");
+            $sp_build = "CREATE PROCEDURE $proc()\r\n";
+            $sp_build.=" BEGIN\r\n\r\n";
+            $sp_build.= $sql;
+            $sp_build.="\r\n\r\nEND";
+            self::exec_sql($sp_build);
+            sleep(1);
+            return self::query_all("CALL $proc;");
+        } catch (\yii\db\Exception $e) {
+            return $e->getMessage();
+        }
+        
+        
+    }
+
 }

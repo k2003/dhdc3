@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50548
 File Encoding         : 65001
 
-Date: 2017-08-07 14:18:40
+Date: 2017-08-07 14:45:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,3 +49,23 @@ INSERT INTO `dhdc_adhoc` VALUES ('5', '3.รอยละของหญิง
 INSERT INTO `dhdc_adhoc` VALUES ('6', '4.รอยละสะสมความครอบคลุมการตรวจคัดกรองมะเร็งปากมดลูกในสตรี 30- 60 ป ภายใน 5 ปี', '', '', '', '', null, null, 'qof2561', null, null, '2017-08-07 13:48:44', '1', '2017-08-07 13:48:44', '1');
 INSERT INTO `dhdc_adhoc` VALUES ('7', '5.1 รอยละการใชยาปฏิชีวนะอยางรับผิดชอบในผูปวยนอกโรคอุจจาระรวง เฉียบพลัน (Acute Diarrhea)', '', '', '', '', null, null, 'qof2561', null, null, '2017-08-07 13:49:13', '1', '2017-08-07 13:49:13', '1');
 INSERT INTO `dhdc_adhoc` VALUES ('8', '5.2 รอยละการใชยาปฏิชีวนะอยางรับผิดชอบในผูปวยนอกโรคติดเชื้อระบบ ทางเดินหายใจ (Respiratory Infection)', '', '', '', '', null, null, 'qof2561', null, null, '2017-08-07 13:49:33', '1', '2017-08-07 13:49:33', '1');
+
+-- ----------------------------
+-- Table structure for dhdc_adhoc_transform
+-- ----------------------------
+DROP TABLE IF EXISTS `dhdc_adhoc_transform`;
+CREATE TABLE `dhdc_adhoc_transform` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sql` longtext,
+  `date_begin` date DEFAULT NULL,
+  `date_end` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of dhdc_adhoc_transform
+-- ----------------------------

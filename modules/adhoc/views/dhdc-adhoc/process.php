@@ -24,12 +24,10 @@ $title = $model->title;
 <div class="sum">
     <?php
     $sql_sum = trim($model->sql_sum);
-    if (substr($sql_sum, -1) <> ';') {
-        $sql_sum = $sql_sum . ";";
-    }
+    
 
     try {
-        $raw = \Yii::$app->db->createCommand($sql_sum)->queryAll();
+        $raw = MyHelper::createAndRunProc("dhdc_adhoc_sum_$id",$sql_sum);
         $dataProvider = new ArrayDataProvider([
             'allModels' => $raw
         ]);
@@ -77,7 +75,7 @@ $title = $model->title;
     }
 
     try {
-        $raw_indiv = \Yii::$app->db->createCommand($sql_indiv)->queryAll();
+        $raw_indiv  = MyHelper::createAndRunProc("dhdc_adhoc_indiv_$id",$sql_indiv);
         if (empty($raw_indiv)) {
             $raw_indiv = ['data' => 'NULL'];
         }
