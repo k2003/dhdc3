@@ -79,10 +79,10 @@ class MyHelper extends Component {
             $sp_build.= $sql;
             $sp_build.="\r\n\r\nEND";
             self::exec_sql($sp_build);
-            sleep(1);
+            //sleep(1);
             return self::query_all("CALL $proc;");
         } catch (\yii\db\Exception $e) {
-            return $e->getMessage();
+            throw new \yii\web\ForbiddenHttpException($e->getMessage());
         }
         
         
