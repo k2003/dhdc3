@@ -1531,5 +1531,5 @@ END
 ;;
 DELIMITER ;
 
-INSERT INTO `sys_transform_plus` (`t_name`, `t_sql`, `bycase`, `version`) VALUES ('dhdc_module_pop_cal_age', 'CALL dhdc_module_pop_cal_age;', 'utehn', '20170811');
-INSERT INTO `sys_transform_plus` (`t_name`, `t_sql`, `bycase`, `version`) VALUES ('dhdc_module_pop_cal_age5', 'CALL dhdc_module_pop_cal_age5;', 'utehn', '20170811');
+DELETE FROM `sys_transform_plus` where t_name ='dhdc_module_pop'  ;
+INSERT INTO `sys_transform_plus` (`t_name`, `t_sql`, `bycase`, `version`) VALUES ('dhdc_module_pop', 'CALL dhdc_module_pop_cal_age;\r\nCALL dhdc_module_pop_cal_age5;', 'utehn', '20170811');

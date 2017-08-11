@@ -40,7 +40,11 @@ $this->params['breadcrumbs'][] = "ข้อมูลประชากร";
             </div>
             <div class="col-sm-3">
                 <button class="btn btn-danger">ตกลง</button>
-                <?= Html::a('TYPEAREA', ['typearea'], ['class' => 'btn btn-blue pull-right']) ?>
+               
+            </div>
+            <div class="col-sm-3">
+                 <?= Html::a('TYPEAREA', ['typearea'], ['class' => 'btn btn-blue']) ?>
+                <?= Html::a('ความหนาแน่น', ['map'], ['class' => 'btn btn-purple pull-right','target'=>'_blank']) ?>
             </div>
 
         </div>

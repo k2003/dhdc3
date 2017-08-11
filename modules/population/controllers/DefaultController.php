@@ -5,11 +5,44 @@ namespace modules\population\controllers;
 use yii\web\Controller;
 use components\MyHelper;
 use yii\data\ArrayDataProvider;
+use common\models\config\SysConfigMain;
+use modules\gis\models\GisDhdcTambon;
 
 /**
  * Default controller for the `population` module
  */
 class DefaultController extends Controller {
+
+    public function actionJsonTambon() {
+       $sql = "  SELECT t.tamboncodefull TAM_CODE,t.tambonname TAM_NAME,g.COORDINATES,COUNT(p.CID) POP
+from ctambon t
+INNER JOIN sys_config_main s ON s.district_code = LEFT(t.tamboncodefull,4)
+INNER JOIN gis_dhdc_tambon g ON CONCAT(g.PROV_CODE,g.AMP_CODE,g.TAM_CODE) = t.tamboncodefull
+INNER JOIN t_person_cid p ON LEFT(p.vhid,6) = t.tamboncodefull
+WHERE   p.typearea in (1,3,5) AND p.DISCHARGE = 9
+GROUP BY t.tamboncodefull ";
+       $raw = MyHelper::query_all($sql);
+       
+        foreach ($raw as $value) {
+            $tambon_pol[] = [
+                'type' => 'Feature',
+                'properties' => [                   
+                    'TAM_NAME' =>$value['TAM_NAME'],
+                    'POP'=>$value['POP']*1
+                ],
+                'geometry' => [
+                    'type' => 'MultiPolygon',
+                    'coordinates' => json_decode($value['COORDINATES']),
+                ]
+            ];
+        }
+        return json_encode($tambon_pol);
+    }
+
+    public function actionMap() {
+
+        return $this->renderPartial('map');
+    }
 
     public function actionTypearea() {
         $sql = " SELECT  t.HOSPCODE,h.hosname HOSNAME
@@ -24,13 +57,13 @@ WHERE t.DISCHARGE = 9
 GROUP BY t.HOSPCODE ";
         $raw = MyHelper::query_all($sql);
         $dataProvider = new ArrayDataProvider([
-            'allModels'=>$raw,
-            'pagination'=>[
-                'pageSize'=>60
+            'allModels' => $raw,
+            'pagination' => [
+                'pageSize' => 60
             ]
         ]);
-        return $this->render('typearea',[
-           'dataProvider'=>$dataProvider 
+        return $this->render('typearea', [
+                    'dataProvider' => $dataProvider
         ]);
     }
 
