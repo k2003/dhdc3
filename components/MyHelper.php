@@ -67,20 +67,42 @@ class MyHelper extends Component {
         return $m->status == 'on';
     }
 
-    public static function createAndRunProc($proc = null, $sql = null) {
+    public static function createAndRunProc($proc_name = null, $sql = null) {
         if (substr($sql, -1) <> ';') {
             $sql = $sql . ";";
         }
         
         try {
-            self::exec_sql("DROP PROCEDURE IF EXISTS $proc");
-            $sp_build = "CREATE PROCEDURE $proc()\r\n";
+            self::exec_sql("DROP PROCEDURE IF EXISTS $proc_name");
+            $sp_build = "CREATE PROCEDURE $proc_name()\r\n";
             $sp_build.=" BEGIN\r\n\r\n";
             $sp_build.= $sql;
             $sp_build.="\r\n\r\nEND";
             self::exec_sql($sp_build);
             //sleep(1);
-            return self::query_all("CALL $proc;");
+            return self::query_all("CALL $proc_name;");
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ForbiddenHttpException($e->getMessage());
+        }
+        
+        
+    }
+    
+    public static function createProc($proc_name = null, $sql = null) {
+        if (substr($sql, -1) <> ';') {
+            $sql = $sql . ";";
+        }
+        
+        try {
+            self::exec_sql("DROP PROCEDURE IF EXISTS $proc_name");
+            $sp_build = "CREATE PROCEDURE $proc_name()\r\n";
+            $sp_build.=" BEGIN\r\n\r\n";
+            $sp_build.= $sql;
+            $sp_build.="\r\n\r\nEND";
+            self::exec_sql($sp_build);
+            //sleep(1);
+            return TRUE;
+            
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ForbiddenHttpException($e->getMessage());
         }

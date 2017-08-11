@@ -1,0 +1,15 @@
+1) restore ไฟล์ dhdc_module_population.sql เข้าฐาน
+
+2) เพิ่มคำสั่งด้านล่างที่ไฟล์  /dhdc3/modules/add_modules.php
+'population' => [
+  'class' => 'modules\population\Population',
+],
+
+3) จัดการระบบ - plugin - เพิ่ม
+Name = ข้อมูลประชากร
+Module Name  = Population
+Routing =  /population/default/index
+Type = Module
+Status = On
+
+4)จัดการระบบ - ประมวลผล - 1) transform

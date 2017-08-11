@@ -32,6 +32,9 @@ return [
     'sync' => [
         'class' => 'modules\sync\Sync',
     ],
+    'population' => [
+        'class' => 'modules\population\Population',
+    ],
 ];
 
 
