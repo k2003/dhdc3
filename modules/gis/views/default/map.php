@@ -12,6 +12,7 @@ $web = \Yii::getAlias('@web');
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
         <title>DHDC 3.0 GIS</title>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBbiMiQFGG0YZrDP--XiSr45tPtizB3e84"></script>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -32,7 +33,10 @@ $web = \Yii::getAlias('@web');
         <![endif]-->
         <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
 
-        <script src="<?= $web ?>/js/Leaflet.Control.Custom.js"></script>        
+        <script src="<?= $web ?>/js/Leaflet.Control.Custom.js"></script> 
+
+        <link href="http://aratcliffe.github.io/Leaflet.contextmenu/dist/leaflet.contextmenu.css" rel="stylesheet"/>
+        <script src='http://aratcliffe.github.io/Leaflet.contextmenu/dist/leaflet.contextmenu.js'></script>
 
         <style>
             body { margin:0; padding:0; }
@@ -70,6 +74,9 @@ $web = \Yii::getAlias('@web');
         <script src="<?= $web ?>/lib/map/leaflet-search/dist/leaflet-search.min.js"></script>
 
         <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script> 
+
+        <script src='http://203.157.118.125/gis_lib/polyline.js'></script>
+
         <div class="title">DHDC GIS ระบบภูมิสารสนเทศ</div>
         <div id='map'></div>
         <div class="show-latlng">
@@ -77,11 +84,60 @@ $web = \Yii::getAlias('@web');
         </div>
         <script>
             L.mapbox.accessToken = 'pk.eyJ1IjoidGVobm5uIiwiYSI6ImNpZzF4bHV4NDE0dTZ1M200YWxweHR0ZzcifQ.lpRRelYpT0ucv1NN08KUWQ';
-            var map = L.mapbox.map('map').setView([16, 100], 6);
-            var hash = L.hash(map);
-            L.control.locate().addTo(map);
 
-            var clusterHome = new L.MarkerClusterGroup().addTo(map);
+
+            var layer_line = L.mapbox.featureLayer();
+            var direction = function (origin, destination) {
+                var directionsService = new google.maps.DirectionsService();
+                var directionsRequest = {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                    unitSystem: google.maps.UnitSystem.METRIC
+                };
+                return new Promise(function (resolve, reject) {
+                    directionsService.route(directionsRequest, function (response, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            var route = response.routes[0].overview_polyline;
+                            var descript = response.routes[0].legs[0];
+                            //console.log(descript)
+                            var data = {
+                                route: route,
+                                descript: {
+                                    distance: descript.distance.text,
+                                    duration: descript.duration.text
+                                }
+
+                            };
+                            resolve(data)
+                        } else {
+                            reject("ผิดพลาด:" + status)
+                        }
+                    })
+                });
+            };
+
+            function calDirect() {
+                var origin = markerA.getLatLng().lat + ',' + markerA.getLatLng().lng;
+                var destination = markerB.getLatLng().lat + ',' + markerB.getLatLng().lng;
+                direction(origin, destination).then(function (result) {
+                    var json_line = polyline.toGeoJSON(result.route);
+                    layer_line.remove();
+                    layer_line.setGeoJSON(json_line)
+                            .setStyle({
+                                weight: 5,
+                                color: 'blue'
+                            }).addTo(map);
+                    var pop = result.descript.distance + " ," + result.descript.duration;
+                    layer_line.bindPopup('รถยนต์ : ' + pop);
+                    layer_line.openPopup();
+                    //console.log(pop)
+                }, function (err) {
+                    alert(err)
+                });
+            }
+
+
             //base map
             var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}&hl=th', {
                 maxZoom: 20,
@@ -100,9 +156,59 @@ $web = \Yii::getAlias('@web');
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             });
             var osm_street = L.mapbox.tileLayer('mapbox.streets');
+            var markerA, markerB;
+            var map = L.mapbox.map('map', null, {
+                contextmenu: true,
+                contextmenuWidth: 140,
+                contextmenuItems: [
+                    {
+                        text: 'จากที่นี่',
+                        callback: function (e) {
+                            if (markerA) {
+                                markerA.remove();
+                            }
+                            markerA = L.marker(e.latlng, {
+                                'draggable': 'true',
+                                icon: L.mapbox.marker.icon({
+                                    'marker-symbol': 'a'
+                                })
+                            }).addTo(map);
+                        }
+                    },
+                    {
+                        text: 'ถึงที่นี่',
+                        callback: function (e) {
+                            if (!markerA) {
+                                return;
+                            }
+                            if (markerB) {
+                                markerB.remove();
+                            }
+                            markerB = L.marker(e.latlng, {
+                                'draggable': true,
+                                icon: L.mapbox.marker.icon({
+                                    'marker-symbol': 'b'
+                                })
+                            }).addTo(map);
+                            calDirect();
+                            markerA.on('dragend',function(){
+                                calDirect();
+                            });
+                            markerB.on('dragend',function(){
+                                calDirect();
+                            });
+
+
+                        }
+                    },
+                ]
+            }).setView([16, 100], 6);
+            var hash = L.hash(map);
+            L.control.locate().addTo(map);
 
 
 
+            var clusterHome = new L.MarkerClusterGroup().addTo(map);
 
             var baseLayers = {
                 "OSM ภูมิประเทศ": osm_street,
@@ -301,10 +407,10 @@ $json_adl_route = Url::to(['point-adl']);
 
                 })
             });
-            
+
             var adl = L.mapbox.featureLayer();
-            adl.loadURL('<?=$json_adl_route?>');
-            adl.on('ready',function(e){
+            adl.loadURL('<?= $json_adl_route ?>');
+            adl.on('ready', function (e) {
                 var json = e.target.getGeoJSON();
             });
 
@@ -313,9 +419,9 @@ $json_adl_route = Url::to(['point-adl']);
             //ฝน
             var base_url = 'http://rain.tvis.in.th/';
             var radar = 'NongKham';
-        var radars = '["NongKham","KKN","PHS","CRI","UBN","OMK"]';
-        var latlng_topright = '["15.09352819610486,101.7458188486135","18.793550,105.026265","19.094393,102.475537","22.305437,102.143387","17.558854,107.095363","19.904425,100.770048"]';
-        var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459","14.411350,97.983591","17.596297,97.611690","12.918883,102.646771","15.630408,96.114592"]';
+            var radars = '["NongKham","KKN","PHS","CRI","UBN","OMK"]';
+            var latlng_topright = '["15.09352819610486,101.7458188486135","18.793550,105.026265","19.094393,102.475537","22.305437,102.143387","17.558854,107.095363","19.904425,100.770048"]';
+            var latlng_bottomleft = '["12.38196058009694,98.97206140040996","14.116192,100.541459","14.411350,97.983591","17.596297,97.611690","12.918883,102.646771","15.630408,96.114592"]';
             var d = new Date();
             var time = d.getTime();
             console.log(time);
@@ -327,8 +433,8 @@ $json_adl_route = Url::to(['point-adl']);
             var boundlast;
             $.each(radars, function (key, value) {
                 var top_right = latlng_topright[key].split(",");
-                var bottom_left = latlng_bottomleft[key].split(",");                
-                
+                var bottom_left = latlng_bottomleft[key].split(",");
+
                 var imageUrl = base_url + "/output/" + value + ".png?" + time,
                         imageBounds = [[top_right[0], top_right[1]], [bottom_left[0], bottom_left[1]]];
                 L.imageOverlay(imageUrl, imageBounds).addTo(rain).setOpacity(0.95);
@@ -345,7 +451,7 @@ $json_adl_route = Url::to(['point-adl']);
                 transparent: true,
                 format: 'image/png',
                 tiles: true,
-                attribution:'<a href="http://flood.gistda.or.th" target="_blank"><b>GISTDA THAILAND</b></a>'
+                attribution: '<a href="http://flood.gistda.or.th" target="_blank"><b>GISTDA THAILAND</b></a>'
             });
             var flood_percent = L.tileLayer.wms('http://tile.gistda.or.th/geoserver/wms?', {
                 layers: "flood:flood_percent",
@@ -353,14 +459,14 @@ $json_adl_route = Url::to(['point-adl']);
                 format: 'image/png',
                 //opacity:1,
                 tiles: true,
-                attribution:'<a href="http://flood.gistda.or.th" target="_blank"><b>GISTDA THAILAND</b></a>'
+                attribution: '<a href="http://flood.gistda.or.th" target="_blank"><b>GISTDA THAILAND</b></a>'
             });
             //จบน้ำท่วม
 
             //จบ wms
 
             var overlays = {
-                'ติดบ้านติดเตียง':adl,
+                'ติดบ้านติดเตียง': adl,
                 'โรงพยาบาล': hospitalGroup.addTo(map),
                 'หลังคาเรือน': clusterHome.addTo(map),
                 'ขอบเขตตำบล': tambonGroup,

@@ -142,7 +142,7 @@ $js = <<<JS
                 name: 'หญิง',
                 data: $female
             }]
-        });      
+        });
 JS;
 $this->registerJs($js);
 ?>
