@@ -86,6 +86,7 @@ $web = \Yii::getAlias('@web');
             L.mapbox.accessToken = 'pk.eyJ1IjoidGVobm5uIiwiYSI6ImNpZzF4bHV4NDE0dTZ1M200YWxweHR0ZzcifQ.lpRRelYpT0ucv1NN08KUWQ';
 
 
+// direction
             var layer_line = L.mapbox.featureLayer();
             var direction = function (origin, destination) {
                 var directionsService = new google.maps.DirectionsService();
@@ -136,8 +137,7 @@ $web = \Yii::getAlias('@web');
                     alert(err)
                 });
             }
-
-
+// direction
             //base map
             var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}&hl=th', {
                 maxZoom: 20,
@@ -167,6 +167,12 @@ $web = \Yii::getAlias('@web');
                             if (markerA) {
                                 markerA.remove();
                             }
+                            if (markerB) {
+                                markerB.remove();
+                            }
+                            if (layer_line) {
+                                layer_line.remove();
+                            }
                             markerA = L.marker(e.latlng, {
                                 'draggable': 'true',
                                 icon: L.mapbox.marker.icon({
@@ -191,10 +197,10 @@ $web = \Yii::getAlias('@web');
                                 })
                             }).addTo(map);
                             calDirect();
-                            markerA.on('dragend',function(){
+                            markerA.on('dragend', function () {
                                 calDirect();
                             });
-                            markerB.on('dragend',function(){
+                            markerB.on('dragend', function () {
                                 calDirect();
                             });
 
@@ -549,5 +555,6 @@ $json_adl_route = Url::to(['point-adl']);
         echo "<div id='modalContent'>Loading...</div>";
         Modal::end();
         ?>
+
     </body>
 </html>
