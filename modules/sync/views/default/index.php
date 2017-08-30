@@ -19,19 +19,21 @@ $dataProvider = new ArrayDataProvider([
             'id',
             [
                 'attribute'=>'title',
-                'width'=>'40%',
+                'width'=>'25%',
             ],
             ['attribute'=>'table'],
-            ['attribute'=>'note'],
+            
             [
                 'attribute' => 'sql',
-                'width'=>'50%',
+                'width'=>'65%',
                 //'contentOptions' => ['style' => 'min-width:180px;word-wrap: break-word;'],
             ],
             [
                 'attribute'=>'update',
+                'format'=>'datetime',
                 'width'=>'60px',
             ],
+            ['attribute'=>'note'],
             [
                 'attribute' => 'active',
                 'format' => 'raw',
