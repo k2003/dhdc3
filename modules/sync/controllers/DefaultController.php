@@ -39,7 +39,7 @@ class DefaultController extends Controller {
     }
 
     public function actionPost($table, $sql) {
-
+        $this->layout = 'hdc';
         $raw = \Yii::$app->db->createCommand($sql)->queryAll();
         $keys = array_keys($raw[0]);
 
@@ -51,8 +51,10 @@ class DefaultController extends Controller {
             $this->sendPost($table, $data);
         }
 
-        $msg = 'sending...success!!!';
-        return "<h3>$msg</h3>";
+        
+        return $this->render('post',[
+            'raw'=>$raw
+        ]);
     }
 
 }
