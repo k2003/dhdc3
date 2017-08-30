@@ -3,6 +3,7 @@
 namespace modules\sync\controllers;
 
 use yii\web\Controller;
+use yii\helpers\Html;
 
 /**
  * Default controller for the `sync` module
@@ -50,7 +51,8 @@ class DefaultController extends Controller {
             ]);
         }
       
-        return 'sending...ok';
+        $msg='sending...success!!!';
+        return "<h3>$msg</h3>";
         
     }
 
