@@ -16,8 +16,8 @@ class DefaultController extends Controller {
      */
     public function actionIndex() {
         $json = file_get_contents('http://61.19.22.108:3001/api/sql');
-        return $this->render('index',[
-            'data'=>  json_decode($json, TRUE)
+        return $this->render('index', [
+                    'data' => json_decode($json, TRUE)
         ]);
     }
 
@@ -38,22 +38,21 @@ class DefaultController extends Controller {
         return $result;
     }
 
-    public function actionPost($table,$sql) {
-        $data = [];
-        $data[] = ['hospcode' => '07477', 'a' => 100, 'b' => 50];
+    public function actionPost($table, $sql) {
+
         $raw = \Yii::$app->db->createCommand($sql)->queryAll();
-        
-        foreach ($raw as $val){
-            $this->sendPost($table,[
-                'hospcode'=>$val['hospcode'],
-                'a'=>$val['a'],
-                'b'=>$val['b']
-            ]);
+        $keys = array_keys($raw[0]);
+
+        foreach ($raw as $val) {
+            $data = [];
+            foreach ($keys as $k) {
+                $data[$k] = $val[$k];
+            }
+            $this->sendPost($table, $data);
         }
-      
-        $msg='sending...success!!!';
+
+        $msg = 'sending...success!!!';
         return "<h3>$msg</h3>";
-        
     }
 
 }
