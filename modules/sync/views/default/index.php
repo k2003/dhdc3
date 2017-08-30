@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\data\ArrayDataProvider;
 
-$this->params['breadcrumbs'][]='ระบบส่งข้อมูลเข้า สสจ.พล'
+$this->params['breadcrumbs'][]='ระบบส่งต่อข้อมูล'
 ?>
 <div class="sync-default-index">
     <h4>รายการคำสั่งประมวลผล ณ ปัจจุบัน</h4>
