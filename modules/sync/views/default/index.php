@@ -1,12 +1,37 @@
 <div class="sync-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+    <h3>รายการคำสั่ง</h3>
+
+    <?php
+
+    use yii\helpers\Html;
+    use kartik\grid\GridView;
+    use yii\data\ArrayDataProvider;
+
+$dataProvider = new ArrayDataProvider([
+        'allModels' => $data
+    ]);
+
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'id',
+            'title',
+            'sql',
+            [
+                'attribute' => 'active',
+                'format' => 'raw',
+                'width'=>'30px',
+                'value' => function($model) {
+                    $table = $model['table'];
+                    $sql = $model['sql'];
+                    if ($model['active'] == 1) {
+                        return Html::a("ส่งข้อมูล", ['post','table' => $table,'sql'=>$sql],['target' => '_blank','class'=>'btn btn-default']);
+                    } else {
+                        return 'close';
+                    }
+                }
+                    ]
+                ]
+            ]);
+            ?>
 </div>
