@@ -21,6 +21,28 @@ class DefaultController extends Controller {
         ]);
     }
 
+    public function actionSyncAll() {
+        $json = file_get_contents('http://61.19.22.108:3001/api/sql');
+        $array = json_decode($json, TRUE);       
+        foreach ($array as $val) {
+            if ($val['active'] == 1) {
+                $sql = $val['sql'];
+                $table = $val['table'];
+                $raw = \Yii::$app->db->createCommand($sql)->queryAll();
+                $keys = array_keys($raw[0]);
+                foreach ($raw as $v) {
+                    $data = [];
+                    foreach ($keys as $k) {
+                        $data[$k] = $v[$k];
+                    }
+                    $this->sendPost($table, $data);
+                }
+                echo $val['id'].'<br>';
+            }
+        }
+        return 'OK';
+    }
+
     protected function sendPost($table, $data) {
         $url_api = "http://61.19.22.108:3001/api/send/$table";
         $options = [
@@ -51,9 +73,9 @@ class DefaultController extends Controller {
             $this->sendPost($table, $data);
         }
 
-        
-        return $this->render('post',[
-            'raw'=>$raw
+
+        return $this->render('post', [
+                    'raw' => $raw
         ]);
     }
 
