@@ -25,7 +25,7 @@ class DefaultController extends Controller {
         $json = file_get_contents('http://61.19.22.108:3001/api/sql');
         $array = json_decode($json, TRUE);       
         foreach ($array as $val) {
-            if ($val['active'] == 1) {
+            if ($val['active'] == 1 && $val['sync_all']==1) {
                 $sql = $val['sql'];
                 $table = $val['table'];
                 $raw = \Yii::$app->db->createCommand($sql)->queryAll();
