@@ -21,4 +21,7 @@ class DefaultController extends Controller
     public function actionGeo(){
         return $this->renderPartial('geo');
     }
+    public function actionGrid(){
+        return $this->render('grid');
+    }
 }
