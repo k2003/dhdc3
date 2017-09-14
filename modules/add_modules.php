@@ -35,6 +35,9 @@ return [
     'population' => [
         'class' => 'modules\population\Population',
     ],
+    'qrcode' => [
+        'class' => 'modules\qrcode\Qrcode',
+    ],
 ];
 
 
