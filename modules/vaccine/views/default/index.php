@@ -99,19 +99,20 @@ $this->params['breadcrumbs'][] = 'ตรวจสอบประวัติว�
             <?php if ($cid): ?>    
                 ผลการค้นหาด้วย 13 หลัก
                 <?php
-                $sql = "SELECT p.HOSPCODE,p.PID,p.CID,concat(p.`NAME`,' ',p.LNAME) NAME,p.SEX,p.BIRTH,TIMESTAMPDIFF(MONTH,p.BIRTH,CURDATE()) AGE_MON
+                $sql = " SELECT p.HOSPCODE,p.PID,p.CID,concat(p.`NAME`,' ',p.LNAME) NAME,p.SEX,p.BIRTH,TIMESTAMPDIFF(MONTH,p.BIRTH,CURDATE()) AGE_MON
 
 ,t.DATE_SERV,concat('(',t.VACCINETYPE,')-',v.engvaccine) VACC 
-,t.VACCINEPLACE
+,t.VACCINEPLACE 
 ,TIMESTAMPDIFF(MONTH,p.BIRTH,t.DATE_SERV) VAC_MON
+,t.HOSPCODE HOS_VACC
+,date(t.D_UPDATE) 'DUPDATE'
 
-FROM epi t
-LEFT JOIN t_person_cid p on t.HOSPCODE = p.HOSPCODE AND t.PID = p.PID
+FROM t_person_cid p
+LEFT JOIN epi t on t.HOSPCODE = p.HOSPCODE AND t.PID = p.PID AND t.VACCINETYPE is not NULL
+
 LEFT JOIN cvaccinetype v ON v.vaccinecode = t.VACCINETYPE
-HAVING VACC is not NULL
-AND CID = '$cid'
-ORDER BY t.DATE_SERV ASC
-";
+where  p.CID = '$cid'
+ORDER BY t.DATE_SERV ASC ";
                 try {
                     $raw = \Yii::$app->db->createCommand($sql)->queryAll();
                 } catch (\yii\db\Exception $e) {
@@ -139,6 +140,8 @@ ORDER BY t.DATE_SERV ASC
                         'VAC_MON:text:อายุ ณ วันฉีด(ด)',
                         'VACC:text:วัคซีน',
                         'VACCINEPLACE:text:ฉีดที่',
+                        'HOS_VACC:text:ผู้บันทึก',
+                        'DUPDATE:text:วันบันทึก'
                     ]
                 ]);
                 ?>
@@ -169,7 +172,7 @@ WHERE t.birth BETWEEN '$bdate_begin' AND '$bdate_end' ";
                 echo GridView::widget([
                     'panel' => ['before' => $info],
                     'responsiveWrap' => false,
-                    'dataProvider' => $dataProvider,
+                    'dataProvider' => $dataProvider,                   
                 ]);
                 ?>
             <?php endif; ?>
