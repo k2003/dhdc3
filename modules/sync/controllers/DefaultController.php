@@ -15,14 +15,14 @@ class DefaultController extends Controller {
      * @return string
      */
     public function actionIndex() {
-        $json = file_get_contents('http://61.19.22.108:3001/api/sql');
+        $json = file_get_contents('http://xx.xx.22.108:3001/api/sql');
         return $this->render('index', [
                     'data' => json_decode($json, TRUE)
         ]);
     }
 
     public function actionSyncAll() {
-        $json = file_get_contents('http://61.19.22.108:3001/api/sql');
+        $json = file_get_contents('http://xx.xx.22.108:3001/api/sql');
         $array = json_decode($json, TRUE);       
         foreach ($array as $val) {
             if ($val['active'] == 1 && $val['sync_all']==1) {
@@ -78,5 +78,23 @@ class DefaultController extends Controller {
                     'raw' => $raw
         ]);
     }
+    
+    // เรียก client ทั้งหมดให้ส่ง โดยตั้งไว้ที่ cronjob
+    /*
+    public function actionAll(){
+        $sql = "select * from cserver where skip <> '1'";
+        $array = MyHelper::queryAll($sql);
+        foreach ($array as $val) {
+            $json = file_get_contents($val['url']);
+            $id = $val['id'];
+            $sql = "update cserver t set t.last_sync = now() where t.id = '$id'";
+            MyHelper::execute($sql);
+        }
+        $sql = "update csync_date set sync_date=now()";
+        MyHelper::execute($sql);
+        return 'Sync-All-Server ... OK';
+    }
+ 
+     */
 
 }
