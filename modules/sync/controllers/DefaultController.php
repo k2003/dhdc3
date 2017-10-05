@@ -44,7 +44,7 @@ class DefaultController extends Controller {
     }
 
     protected function sendPost($table, $data) {
-        $url_api = "http://61.19.22.108:3001/api/send/$table";
+        $url_api = "http://xx.xx.22.108:3001/api/send/$table";
         $options = [
             'http' => [
                 'header' => "Content-type: application/x-www-form-urlencoded",
