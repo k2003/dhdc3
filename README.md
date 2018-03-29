@@ -27,6 +27,8 @@
 <hr>
 <p><b>การติดตั้ง Plugins</b>
 <p>โปรดอ่าน dhdc3/moules/การติดตั้ง.txt
+<p> ดาวน์โหลด Plugin http://203.157.118.123/dhdc3/modules/
+<p> ดาวน์โหลด Fix Bug http://203.157.118.123/dhdc3/fixbug/
 
 
 <hr>
