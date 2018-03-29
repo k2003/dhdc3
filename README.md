@@ -12,6 +12,7 @@
 <p>(8) #chmod -R 0777 dhdc3
 <p>(9) download  http://203.157.118.123/dhdc3/databases.zip
 <p>(10) Linux OS แก้ไข httpd.conf  ส่วน AllowOverRide  All
+<p>(11) การตั้งค่า php.ini และ my.cnf https://github.com/sirensoft/dhdc2/blob/master/README.md
 <hr>
 <p> <b>ขั้นตอนการติดตั้งระบบ</b>
 <p>(1) สร้างฐานชื่อ dhdc3 กำหนด Collation เป็น utf8_general_ci (กรณี upgrade จาก dhdc2 ข้ามไปข้อ 2 )
