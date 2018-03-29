@@ -31,7 +31,7 @@
 <p> ดาวน์โหลด Fix Bug http://203.157.118.123/dhdc3/fixbug/
 
 <hr>
-ปรับ 43 แฟ้มตามโครงสร้างใหม่ (V2.3) http://cloud.sobmoei.net/index.php/s/6FIN2YJMjGxxTeK
+ปรับ 52 แฟ้มตามโครงสร้างใหม่ (V2.3) http://cloud.sobmoei.net/index.php/s/6FIN2YJMjGxxTeK
 
 <hr>
 <p>Programmer Section
